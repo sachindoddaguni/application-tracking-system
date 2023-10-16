@@ -3,11 +3,23 @@ version: '3.8'
 services:
   backend:
     build: ./backend/
+    environment:
+      db_username: db
     ports:
       - 5000:5000
+    profiles:
+      - ui-dev
+      - all
   frontend:
     build: ./frontend/
     ports:
       - 3000:3000
+    profiles:
+      - api-dev
+      - all
   db:
     image: mongo
+    profiles:
+      - ui-dev
+      - api-dev
+      - all

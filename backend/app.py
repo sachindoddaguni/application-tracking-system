@@ -17,6 +17,7 @@ from datetime import datetime, timedelta
 import yaml
 import hashlib
 import uuid
+import os
 
 existing_endpoints = ["/applications", "/resume"]
 
@@ -470,7 +471,7 @@ with open("application.yml") as f:
     password = info["password"]
     app.config["MONGODB_SETTINGS"] = {
         "db": "appTracker",
-        "host": "db",
+        "host": os.getenv("db_username"),
     }
 db = MongoEngine()
 db.init_app(app)

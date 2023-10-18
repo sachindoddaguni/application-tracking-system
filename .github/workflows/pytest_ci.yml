@@ -6,7 +6,7 @@ name: Pytest CI
 on:
   push:
     branches:
-      - "main"
+      - "feature/pr-comment-coverage"
   
 jobs:
   build:

@@ -195,9 +195,11 @@ def create_app():
             auth_tokens_new = user["authTokens"] + [
                 {"token": token, "expiry": expiry_str}
             ]
-            print(auth_tokens_new)
-            user.update(authTokens=auth_tokens_new)
-            print(user)
+            user.authTokens = auth_tokens_new
+            user.save()
+            print(authTokens)
+            # user.update(authTokens=auth_tokens_new)
+            # print(user)
             return jsonify({"token": token, "expiry": expiry_str})
         except:
             return jsonify({"error": "Internal server error"}), 500

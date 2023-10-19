@@ -113,13 +113,13 @@ We are thrilled to introduce a powerful new feature to JTracker 2.0 – Dockeriz
 
 #### Why Dockerize JTracker 2.0?
 
-- ** **Simplified Setup**: With JTracker Dockerized, you no longer need to spend time configuring and installing various dependencies. It's as simple as running a single command.
-- ** **Consistent Environment**: Docker ensures that JTracker runs consistently across different systems. Say goodbye to the "It works on my machine" problem. Now, your application will work seamlessly for everyone.
-- ** **Easy Deployment**: Sharing your tool with others becomes effortless. Docker containers can be distributed and executed on any platform with Docker support, making collaboration and deployment hassle-free.
-- ** **Version Control**: Docker allows you to version your JTracker containers. This means you can easily switch between different versions or update to the latest release without compatibility concerns.
-- ** **Isolation**: Docker containers provide isolation, keeping your tool and its dependencies separate from the host system. This enhances security and minimizes conflicts with other applications.
-- ** **Scalability**: Docker makes it easy to scale JTracker based on your needs. You can manage multiple containers and even orchestrate them for complex applications using tools like Docker Compose or Kubernetes.
-- ** **Dependency Management**: All JTracker dependencies are defined in code within the Docker container. You won't have to worry about the hassle of managing dependencies on your local system anymore.
+- **Simplified Setup**: With JTracker Dockerized, you no longer need to spend time configuring and installing various dependencies. It's as simple as running a single command.
+- **Consistent Environment**: Docker ensures that JTracker runs consistently across different systems. Say goodbye to the "It works on my machine" problem. Now, your application will work seamlessly for everyone.
+- **Easy Deployment**: Sharing your tool with others becomes effortless. Docker containers can be distributed and executed on any platform with Docker support, making collaboration and deployment hassle-free.
+- **Version Control**: Docker allows you to version your JTracker containers. This means you can easily switch between different versions or update to the latest release without compatibility concerns.
+- **Isolation**: Docker containers provide isolation, keeping your tool and its dependencies separate from the host system. This enhances security and minimizes conflicts with other applications.
+- **Scalability**: Docker makes it easy to scale JTracker based on your needs. You can manage multiple containers and even orchestrate them for complex applications using tools like Docker Compose or Kubernetes.
+- **Dependency Management**: All JTracker dependencies are defined in code within the Docker container. You won't have to worry about the hassle of managing dependencies on your local system anymore.
 
 
 #### Version 1.1

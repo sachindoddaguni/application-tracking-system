@@ -10,7 +10,7 @@ https://user-images.githubusercontent.com/89501363/144725439-5d9191f8-df13-4814-
 [![Build and Deploy Frontend](https://github.com/kingan1/application-tracking-system/actions/workflows/frontend_CI_CD.yml/badge.svg)](https://github.com/kingan1/application-tracking-system/actions/workflows/frontend_CI_CD.yml)
 [![Super Linter](https://github.com/kingan1/application-tracking-system/actions/workflows/super-linter.yml/badge.svg)](https://github.com/kingan1/application-tracking-system/actions/workflows/super-linter.yml)
 
-#      J-Tracker - Your Job Tracking Assistant
+#      J-Tracker 2.0 - Your Job Tracking Assistant
 
 https://user-images.githubusercontent.com/43064854/135554150-c06afd4e-d223-47e3-b123-b45f9cd1b87a.mp4
 
@@ -26,6 +26,7 @@ Our application keeps track of the jobs you've added to your wish list. It also 
 - [Demo](#demo)
 - [Improvements](#improvements)
     + [Whats New](#whats-new)
+    + [Resume Builder](#resume-builder)
 - [Roadmap](#roadmap)
 - [Future Scope](#future-scope)
 - [Explanation](#explanation)
@@ -95,7 +96,17 @@ The interface through which a user is able to search for specific jobs based on 
 <p align="center"><img width="700" src="./resources/resume.png"></p>
 
 
-### Whats New
+### Automatic Resume Builder
+
+Introducing a powerful new feature! Users can now create a stunning and ATS-friendly resume with minimal effort. The Automatic Resume Builder simplifies the process by providing a user-friendly form for basic information input. The best part? Your resume is generated as an editable Word document, offering full customization to suit your preferences and style.
+
+Key Features:
+- **Effortless Data Entry**: Quickly provide your basic information, education, skills, and more.
+- **ATS-Friendly**: Ensure compatibility with modern hiring systems.
+- **Customization**: Tailor your resume to your preferences.
+- **Time-Saving**: Automate the formatting and editing process.
+![image](https://github.com/sachindoddaguni/application-tracking-system/assets/28365724/79818a0d-5bd0-49f7-9a9a-8d8f598efcbe)
+
 
 #### Version 1.1
 

@@ -122,6 +122,21 @@ We are thrilled to introduce a powerful new feature to JTracker 2.0 – Dockeriz
 - **Scalability**: Docker makes it easy to scale JTracker based on your needs. You can manage multiple containers and even orchestrate them for complex applications using tools like Docker Compose or Kubernetes.
 - **Dependency Management**: All JTracker dependencies are defined in code within the Docker container. You won't have to worry about the hassle of managing dependencies on your local system anymore.
 
+### Email Notification for Job Application Deadlines**
+
+We are excited to introduce a game-changing enhancement to J-Tracker 2.0 - the Email Notification feature! Keeping track of upcoming job application deadlines is now more effortless than ever.
+
+#### How It Works 
+- Set your job application deadlines within the application.
+- J-Tracker 2.0 will automatically send you email notifications as your application deadlines approach.
+- Stay organized and never miss an important application deadline again.
+
+#### Benefits
+- **Efficiency:** Receive timely reminders, allowing you to prepare and submit your applications promptly.
+- **Reduced Stress:** No more worrying about missed deadlines or last-minute rushes.
+- **Enhanced Productivity:** Focus on your job search while J-Tracker 2.0 handles the scheduling.
+
+This new feature is designed to streamline your job application process further, making J-Tracker 2.0 your ultimate Job Tracking Assistant. With email notifications for upcoming job application deadlines, you can confidently manage your job search and secure your dream job.
 
 #### Version 1.1
 

@@ -25,7 +25,6 @@ Our application keeps track of the jobs you've added to your wish list. It also 
 - [Basic Design](#basic-design)
 - [Demo](#demo)
 - [Improvements](#improvements)
-    + [Whats New](#whats-new)
     + [Resume Builder](#resume-builder)
 - [Roadmap](#roadmap)
 - [Future Scope](#future-scope)
@@ -105,7 +104,6 @@ Key Features:
 - **ATS-Friendly**: Ensure compatibility with modern hiring systems.
 - **Customization**: Tailor your resume to your preferences.
 - **Time-Saving**: Automate the formatting and editing process.
-![image](https://github.com/sachindoddaguni/application-tracking-system/assets/28365724/79818a0d-5bd0-49f7-9a9a-8d8f598efcbe)
 
 
 #### Version 1.1
@@ -230,11 +228,14 @@ The project is licensed under the [MIT](https://choosealicense.com/licenses/mit/
 ## How to Contribute?
 Please see our CONTRIBUTING.md for instructions on how to contribute to the repository and assist us in improving the project.
 
+## Have Questions or Need Assistance?
+
+If you have any questions, need help, or want to provide feedback about the J-Tracker 2.0, feel free to contact us at aditya.a.chitlangia@gmail.com. We're here to assist you and make your resume creation experience as smooth as possible.
+
+Your inquiries and suggestions are always welcome!
 
 ## Team Members
-- Ashley King
-- Manoj Kumar
-- Rakesh Muppala
-- Sayali Parab
-- Ashwin Das
-- Renji Joseph Sabu 
+- Aditya Chitlangia
+- Abhishek Arun Sheth
+- Sachin Rudrappa Doddaguni
+- Amogh Mahesh

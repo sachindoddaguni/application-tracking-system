@@ -19,6 +19,11 @@ import hashlib
 import uuid
 import os
 
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from apscheduler.schedulers.background import BackgroundScheduler
+
 existing_endpoints = ["/applications", "/resume"]
 
 
@@ -333,6 +338,14 @@ def create_app():
             applications = user["applications"] + [current_application]
 
             user.update(applications=applications)
+            try:
+                    # Send an email notification
+                    to_email = user.email  # Use the user's email address
+                    subject = "New Job Application Added"
+                    message = f"Hello {user.fullName},\n\nA new job application has been added:\nJob Title: {current_application['jobTitle']}\nCompany: {current_application['companyName']}\n\nBest regards,\nYour Application Tracker"
+                    send_email(to_email, subject, message)
+            except:
+                    return jsonify({"error": "EMAIL wasn't sent"}), 401
             return jsonify(current_application), 200
         except:
             return jsonify({"error": "Internal server error"}), 500
@@ -540,6 +553,29 @@ def get_new_application_id(user_id):
 
     return new_id + 1
 
+def send_email(to_email, subject, message):
+    # Set up your email and password here, or use environment variables
+    gmail_user = "amoghm14@gmail.com"
+    gmail_password = ""
+
+    msg = MIMEMultipart()
+    msg['From'] = gmail_user
+    msg['To'] = to_email
+    msg['Subject'] = subject
+
+    # Attach the message
+    msg.attach(MIMEText(message, 'plain'))
+
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(gmail_user, gmail_password)
+        text = msg.as_string()
+        server.sendmail(gmail_user, to_email, text)
+        server.quit()
+        print("Email sent successfully!")
+    except Exception as e:
+        print("Email could not be sent. Error: {}".format(str(e)))
 
 if __name__ == "__main__":
     app.run()

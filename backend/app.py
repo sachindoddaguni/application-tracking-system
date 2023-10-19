@@ -18,6 +18,8 @@ import yaml
 import hashlib
 import uuid
 import os
+from reportlab.pdfgen import canvas
+from io import BytesIO
 
 existing_endpoints = ["/applications", "/resume"]
 
@@ -70,7 +72,9 @@ def create_app():
                     return jsonify({"error": "Unauthorized"}), 401
                 userid = token.split(".")[0]
                 user = Users.objects(id=userid).first()
-
+                print(user)
+                print(token)
+                print(headers)
                 if user is None:
                     return jsonify({"error": "Unauthorized"}), 401
 
@@ -86,7 +90,7 @@ def create_app():
                         else:
                             delete_auth_token(tokens, userid)
                         break
-
+                print(expiry_flag)
                 if not expiry_flag:
                     return jsonify({"error": "Unauthorized"}), 401
 
@@ -196,7 +200,9 @@ def create_app():
             auth_tokens_new = user["authTokens"] + [
                 {"token": token, "expiry": expiry_str}
             ]
-            user.update(authTokens=auth_tokens_new)
+            user["authTokens"]=auth_tokens_new
+            print(user)
+            user.save()
             return jsonify({"token": token, "expiry": expiry_str})
         except:
             return jsonify({"error": "Internal server error"}), 500
@@ -515,7 +521,6 @@ def get_new_user_id():
 
     return new_id + 1
 
-
 def get_new_application_id(user_id):
     """
     Returns the next value to be used for new application
@@ -533,6 +538,50 @@ def get_new_application_id(user_id):
         new_id = max(new_id, a["id"])
 
     return new_id + 1
+
+@app.route('/resumebuilder', methods=['POST'])
+def form_builder():
+    try:
+        # Assuming the request data is in JSON format
+        data = request.json
+
+        # Log the data (you can customize this part)
+        print("Received Form Data:")
+        for key, value in data.items():
+            print(f"{key}: {value}")
+
+        # Generate PDF
+        pdf_data = generate_pdf(data)
+
+        # Send the PDF file as a response
+        return send_file(pdf_data, mimetype='application/pdf', as_attachment=True,
+                         attachment_filename='generated_resume.pdf')
+    except Exception as e:
+        print(f"Error processing form data: {str(e)}")
+        return "Error processing form data", 500
+
+def generate_pdf(data):
+    # Create a BytesIO buffer to store the PDF
+    buffer = BytesIO()
+
+    # Create a PDF document
+    pdf = canvas.Canvas(buffer)
+
+    # Add content to the PDF (customize this part based on your needs)
+    pdf.drawString(100, 800, f"Name: {data.get('name', '')}")
+    pdf.drawString(100, 780, f"Address: {data.get('address', '')}")
+    # Add more content as needed
+
+    # Save the PDF document to the BytesIO buffer
+    pdf.save()
+
+    # Reset the buffer position to the beginning
+    buffer.seek(0)
+
+    return buffer
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 if __name__ == "__main__":

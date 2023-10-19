@@ -95,6 +95,7 @@ The interface through which a user is able to search for specific jobs based on 
 
 <p align="center"><img width="700" src="./resources/resume.png"></p>
 
+## Improvements
 
 ### Resume Builder
 

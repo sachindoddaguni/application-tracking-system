@@ -147,6 +147,7 @@ def create_app():
             print(data)
             try:
                 _ = data["username"]
+                _ = data["email"]
                 _ = data["password"]
                 _ = data["fullName"]
             except:
@@ -155,12 +156,16 @@ def create_app():
             username_exists = Users.objects(username=data["username"])
             if len(username_exists) != 0:
                 return jsonify({"error": "Username already exists"}), 400
+            email_exists = Users.objects(email=data["email"])
+            if len(email_exists) != 0:
+                return jsonify({"error": "Email already exists"}), 400
             password = data["password"]
             password_hash = hashlib.md5(password.encode())
             user = Users(
                 id=get_new_user_id(),
                 fullName=data["fullName"],
                 username=data["username"],
+                email=data["email"],
                 password=password_hash.hexdigest(),
                 authTokens=[],
                 applications=[],
@@ -485,6 +490,7 @@ class Users(db.Document):
     id = db.IntField(primary_key=True)
     fullName = db.StringField()
     username = db.StringField()
+    email    = db.StringField()
     password = db.StringField()
     authTokens = db.ListField()
     applications = db.ListField()
@@ -496,7 +502,7 @@ class Users(db.Document):
 
         :return: JSON object
         """
-        return {"id": self.id, "fullName": self.fullName, "username": self.username}
+        return {"id": self.id, "fullName": self.fullName, "username": self.username, "email": self.email}
 
 
 def get_new_user_id():

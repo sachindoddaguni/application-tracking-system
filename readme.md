@@ -26,6 +26,7 @@ Our application keeps track of the jobs you've added to your wish list. It also 
 - [Demo](#demo)
 - [Improvements](#improvements)
     + [Resume Builder](#resume-builder)
+    + [Dockerization](#dockerization)
 - [Roadmap](#roadmap)
 - [Future Scope](#future-scope)
 - [Explanation](#explanation)
@@ -104,6 +105,21 @@ Key Features:
 - **ATS-Friendly**: Ensure compatibility with modern hiring systems.
 - **Customization**: Tailor your resume to your preferences.
 - **Time-Saving**: Automate the formatting and editing process.
+
+
+### Dockerization
+
+We are thrilled to introduce a powerful new feature to JTracker 2.0 – Dockerization! This enhancement brings a multitude of advantages, making your experience with JTracker even better.
+
+#### Why Dockerize JTracker 2.0?
+
+- **1. **Simplified Setup**: With JTracker Dockerized, you no longer need to spend time configuring and installing various dependencies. It's as simple as running a single command.
+- **2. **Consistent Environment**: Docker ensures that JTracker runs consistently across different systems. Say goodbye to the "It works on my machine" problem. Now, your application will work seamlessly for everyone.
+- **3. **Easy Deployment**: Sharing your tool with others becomes effortless. Docker containers can be distributed and executed on any platform with Docker support, making collaboration and deployment hassle-free.
+- **4. **Version Control**: Docker allows you to version your JTracker containers. This means you can easily switch between different versions or update to the latest release without compatibility concerns.
+- **5. **Isolation**: Docker containers provide isolation, keeping your tool and its dependencies separate from the host system. This enhances security and minimizes conflicts with other applications.
+- **6. **Scalability**: Docker makes it easy to scale JTracker based on your needs. You can manage multiple containers and even orchestrate them for complex applications using tools like Docker Compose or Kubernetes.
+- **7. **Dependency Management**: All JTracker dependencies are defined in code within the Docker container. You won't have to worry about the hassle of managing dependencies on your local system anymore.
 
 
 #### Version 1.1

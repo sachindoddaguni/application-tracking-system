@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styles from './styles.module.css';
 
 class BuildResumePage extends Component {
   constructor(props) {
@@ -15,6 +16,10 @@ class BuildResumePage extends Component {
       workExperience: [],
       projects: [],
       extracurricularActivities: [],
+      downloadLink: null,
+      buttonVisible: false,
+      linkClicked: false,
+      formSubmitted: false,
     };
   }
 
@@ -36,10 +41,60 @@ class BuildResumePage extends Component {
       return { education: educationCopy };
     });
   };
+
+    handleInputChangeSkills = (index, field, value) => {
+    this.setState((prevState) => {
+      const skillsCopy = [...prevState.skills];
+      const entryCopy = { ...skillsCopy[index] };
+
+      // Update the specific field in the entry copy
+      entryCopy[field] = value;
+
+      // Update the entry in the skills copy
+      skillsCopy[index] = entryCopy;
+
+      return { skills: skillsCopy };
+    });
+  };
+
+    handleInputChangeWorkExp = (index, field, value) => {
+    this.setState((prevState) => {
+      const workexpCopy = [...prevState.workExperience];
+      const entryCopy = { ...workexpCopy[index] };
+
+      // Update the specific field in the entry copy
+      entryCopy[field] = value;
+
+      // Update the entry in the skills copy
+      workexpCopy[index] = entryCopy;
+
+      return { workExperience: workexpCopy };
+    });
+  };
+
+        handleInputChangeProjects = (index, field, value) => {
+    this.setState((prevState) => {
+      const projectsCopy = [...prevState.projects];
+      const entryCopy = { ...projectsCopy[index] };
+
+      // Update the specific field in the entry copy
+      entryCopy[field] = value;
+
+      // Update the entry in the skills copy
+      projectsCopy[index] = entryCopy;
+
+      return { projects: projectsCopy };
+    });
+  };
+
+
+
   handleAddSection = (section) => {
     const newEntry = {
-      university: '',
-      degree: '',
+      // s: '',
+      // l: '',
+      // skills: '',
+      // level: '',
       // Add default values for other fields as needed
     };
 
@@ -58,6 +113,7 @@ class BuildResumePage extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
+
 
     // Prepare the data to be sent to the server
     const formData = {
@@ -85,24 +141,14 @@ class BuildResumePage extends Component {
         body: JSON.stringify(formData),
       });
 
-      if (response.ok && response.headers.get('Content-Type') === 'application/pdf') {
+      if (response.ok && response.headers.get('Content-Type') === 'application/msword') {
         // Convert the response to a Blob
         const blob = await response.blob();
-    
-        // Create a link element to trigger the download
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = 'generated_resume.pdf';
-    
-        // Append the link to the body and trigger the download
-        document.body.appendChild(link);
-        link.click();
-    
-        // Remove the link from the body
-        document.body.removeChild(link);
-    
-        // Clean up the object URL to avoid memory leaks
-        window.URL.revokeObjectURL(link.href);
+
+        const url = window.URL.createObjectURL(blob);
+        this.setState({ downloadLink: url,          buttonVisible: true,
+          formSubmitted: true,           linkClicked: false, });
+
       } else {
         console.error('Failed to submit form:', response.status, response.statusText);
       }
@@ -110,16 +156,27 @@ class BuildResumePage extends Component {
       console.error('Error submitting form:', error.message);
     }
   };
-  
+
+    linkClickHandler = () => {
+    this.setState({ linkClicked: true });
+  };
 
   render() {
     return (
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <form style={{ textAlign: 'left'}} onSubmit={this.handleSubmit}>
-          <div style={{ marginBottom: '10px' }}>
+        <form style={{ textAlign: 'left'}} onSubmit={this.handleSubmit} className={styles['download-form']}>
+        {!this.state.linkClicked && this.state.downloadLink && (
+          <a
+            href={this.state.downloadLink}
+            download="Resume.docx"
+            onClick={this.linkClickHandler}
+          >
+            Click here to download the Document
+          </a>
+        )}
+          <div style={{ marginBottom: '10px'}}>
             <div style={{ marginBottom: '10px', marginTop: '10px' }}>
-              <h2>Build Your Resume:</h2>
-            </div>
+              <h2>__________________Build Your Resume__________________</h2></div>
             <h3 style={{ marginBottom: '10px', marginTop: '50px' }}>Personal Information:</h3>
           </div>
           <div style={{ marginBottom: '50px' }}>
@@ -220,13 +277,131 @@ class BuildResumePage extends Component {
             </div>
           ))}
 
-          {/* Similar sections for Skills, Work Experience, Projects, Extracurricular Activities */}
+
+
+          <h3>Skills:</h3>
+          <div style={{ marginBottom: '10px' }}>
+            <button
+              type="button"
+              style={{ marginBottom: '10px', width: '150px' }}
+              onClick={() => this.handleAddSection('skills')}
+            >
+              Add Skills
+            </button>
+          </div>
+
+          {this.state.skills.map((entry, index) => (
+            <div className="row" style={{ marginBottom: '10px' }} key={index}>
+              <label>Skill:</label>
+              <input
+                type="text"
+                value={entry.skills || ''}
+                onChange={(e) => this.handleInputChangeSkills(index, 'skills', e.target.value)}
+              />
+
+              <label>Level:</label>
+              <input
+                type="text"
+                value={entry.level || ''}
+                onChange={(e) => this.handleInputChangeSkills(index, 'level', e.target.value)}
+              />
+
+              <button
+                type="button"
+                style={{ marginLeft: '10px', width: '100px' }}
+                onClick={() => this.handleRemoveSection('skills', index)}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+
+
+          <h3>Work Experience:</h3>
+          <div style={{ marginBottom: '10px' }}>
+            <button
+              type="button"
+              style={{ marginBottom: '10px', width: '150px' }}
+              onClick={() => this.handleAddSection('workExperience')}
+            >
+              Add Additional
+            </button>
+          </div>
+
+          {this.state.workExperience.map((entry, index) => (
+            <div className="row" style={{ marginBottom: '10px' }} key={index}>
+              <label>Company:</label>
+              <input
+                type="text"
+                value={entry.company || ''}
+                onChange={(e) => this.handleInputChangeWorkExp(index, 'company', e.target.value)}
+              />
+
+              <label>Description:</label>
+              <input
+                type="text"
+                value={entry.descriptionc || ''}
+                onChange={(e) => this.handleInputChangeWorkExp(index, 'descriptionc', e.target.value)}
+              />
+
+              <button
+                type="button"
+                style={{ marginLeft: '10px', width: '100px' }}
+                onClick={() => this.handleRemoveSection('workExperience', index)}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+
+
+
+
+          <h3>Projects:</h3>
+          <div style={{ marginBottom: '10px' }}>
+            <button
+              type="button"
+              style={{ marginBottom: '10px', width: '150px' }}
+              onClick={() => this.handleAddSection('projects')}
+            >
+              Add Projects
+            </button>
+          </div>
+
+          {this.state.projects.map((entry, index) => (
+            <div className="row" style={{ marginBottom: '10px' }} key={index}>
+              <label>Project Title:</label>
+              <input
+                type="text"
+                value={entry.project_title || ''}
+                onChange={(e) => this.handleInputChangeProjects(index, 'project_title', e.target.value)}
+              />
+
+              <label>Description:</label>
+              <input
+                type="text"
+                value={entry.project_desc || ''}
+                onChange={(e) => this.handleInputChangeProjects(index, 'project_desc', e.target.value)}
+              />
+
+              <button
+                type="button"
+                style={{ marginLeft: '10px', width: '100px' }}
+                onClick={() => this.handleRemoveSection('projects', index)}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+
 
           <button type="submit" style={{ width: '100px' }}>
             Submit
           </button>
         </form>
       </div>
+
+
 
     );
   }

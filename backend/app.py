@@ -8,18 +8,17 @@ from flask_cors import CORS, cross_origin
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
-from itertools import islice
 from webdriver_manager.chrome import ChromeDriverManager
-from bson.json_util import dumps
 import pandas as pd
-import json
 from datetime import datetime, timedelta
 import yaml
 import hashlib
 import uuid
-import os
-from reportlab.pdfgen import canvas
 from io import BytesIO
+from docx import Document
+from docx.shared import Pt
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+import json
 
 existing_endpoints = ["/applications", "/resume"]
 
@@ -200,7 +199,7 @@ def create_app():
             auth_tokens_new = user["authTokens"] + [
                 {"token": token, "expiry": expiry_str}
             ]
-            user["authTokens"]=auth_tokens_new
+            user["authTokens"] = auth_tokens_new
             print(user)
             user.save()
             return jsonify({"token": token, "expiry": expiry_str})
@@ -251,11 +250,11 @@ def create_app():
         # create a url for a crawler to fetch job information
         if salary:
             url = (
-                "https://www.google.com/search?q="
-                + keywords
-                + "%20salary%20"
-                + salary
-                + "&ibp=htl;jobs"
+                    "https://www.google.com/search?q="
+                    + keywords
+                    + "%20salary%20"
+                    + salary
+                    + "&ibp=htl;jobs"
             )
         else:
             url = "https://www.google.com/search?q=" + keywords + "&ibp=htl;jobs"
@@ -521,6 +520,7 @@ def get_new_user_id():
 
     return new_id + 1
 
+
 def get_new_application_id(user_id):
     """
     Returns the next value to be used for new application
@@ -554,35 +554,15 @@ def form_builder():
         pdf_data = generate_pdf(data)
 
         # Send the PDF file as a response
-        return send_file(pdf_data, mimetype='application/pdf', as_attachment=True,
-                         attachment_filename='generated_resume.pdf')
+        return send_file(pdf_data, mimetype='application/msword', as_attachment=True,
+                         attachment_filename='generated_resume.docx')
     except Exception as e:
         print(f"Error processing form data: {str(e)}")
         return "Error processing form data", 500
 
-def generate_pdf(data):
-    # Create a BytesIO buffer to store the PDF
-    buffer = BytesIO()
-
-    # Create a PDF document
-    pdf = canvas.Canvas(buffer)
-
-    # Add content to the PDF (customize this part based on your needs)
-    pdf.drawString(100, 800, f"Name: {data.get('name', '')}")
-    pdf.drawString(100, 780, f"Address: {data.get('address', '')}")
-    # Add more content as needed
-
-    # Save the PDF document to the BytesIO buffer
-    pdf.save()
-
-    # Reset the buffer position to the beginning
-    buffer.seek(0)
-
-    return buffer
 
 if __name__ == '__main__':
     app.run(debug=True)
-
 
 if __name__ == "__main__":
     app.run()

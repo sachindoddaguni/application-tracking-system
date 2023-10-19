@@ -95,7 +95,7 @@ The interface through which a user is able to search for specific jobs based on 
 <p align="center"><img width="700" src="./resources/resume.png"></p>
 
 
-### Automatic Resume Builder
+### Resume Builder
 
 Introducing a powerful new feature! Users can now create a stunning and ATS-friendly resume with minimal effort. The Automatic Resume Builder simplifies the process by providing a user-friendly form for basic information input. The best part? Your resume is generated as an editable Word document, offering full customization to suit your preferences and style.
 

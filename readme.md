@@ -47,6 +47,7 @@ Our application keeps track of the jobs you've added to your wish list. It also 
 - [License](#license)
 - [How to Contribute](#how-to-contribute)
 - [Team Members](#team-members)
+- [Recommended citation](#recommended-citation)
 
 
 
@@ -359,4 +360,8 @@ Your inquiries and suggestions are always welcome!
 - Aditya Chitlangia
 - Abhishek Arun Sheth
 - Sachin Rudrappa Doddaguni
+
+## Recommended Citation
+J-Tracker 2.0 Amogh Mahesh, Aditya Chitlangia, Abhishek Arun Sheth, Sachin Rudrappa Doddaguni. 2023.
+[https://github.com/sachindoddaguni/application-tracking-system]
 

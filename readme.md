@@ -29,6 +29,7 @@ Our application keeps track of the jobs you've added to your wish list. It also 
     + [Dockerization](#dockerization)
     + [Email Notification for Job Application Deadlines](#Email-Notification-for-Job-Application-Deadlines)
 - [Roadmap](#roadmap)
+- [Successful Usecases](#successful-usecases)
 - [Future Scope](#future-scope)
 - [Explanation](#explanation)
 - [Technologies Used](#technologies-used)
@@ -41,6 +42,7 @@ Our application keeps track of the jobs you've added to your wish list. It also 
 - [Hosting the Database](#hosting-the-database)
     + [Local MongoDB](#local-mongodb)
     + [Hosted database with MongoDB Atlas](#hosted-database-with-mongodb-atlas)
+- [Troubleshooting](#troubleshooting)
 - [License](#license)
 - [How to Contribute](#how-to-contribute)
 - [Team Members](#team-members)
@@ -333,6 +335,10 @@ If you encounter issues while using J-Tracker 2.0, here are some common problems
 2. Confirm that your email notification settings are correctly configured.
 3. Check your spam folder for any misplaced notifications.
 4. If you're still facing issues, refer to the project's documentation for the email notification feature or seek help from the project's community.
+
+## Project Funding
+
+Our project is currently not funded and operates on a volunteer and open-source basis. The improvement of the project relies solely on the dedication of our team and contributions from the open-source community.
 
 ## License
 The project is licensed under the [MIT](https://choosealicense.com/licenses/mit/) license. 

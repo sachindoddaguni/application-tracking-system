@@ -539,6 +539,96 @@ def get_new_application_id(user_id):
 
     return new_id + 1
 
+def generate_pdf(data):
+    doc = Document()
+
+    # Set page margins to fit within one page
+    sections = doc.sections
+    for section in sections:
+        section.left_margin = Pt(36)  # 0.5 inch
+        section.right_margin = Pt(36)  # 0.5 inch
+        section.top_margin = Pt(36)  # 0.5 inch
+        section.bottom_margin = Pt(36)  # 0.5 inch
+
+    # Helper function to add heading with format
+    def add_heading_with_format(doc, text, font_size=16, is_bold=True):
+        p = doc.add_paragraph()
+        run = p.add_run(text)
+        if is_bold:
+            run.bold = True
+        p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+        run.font.size = Pt(font_size)
+
+    # Function to add details section
+    def add_details_section(doc, section_title, details, is_bold_title=True):
+        if section_title:
+            add_heading_with_format(doc, section_title, font_size=14, is_bold=True)
+        for detail in details:
+            for key, value in detail.items():
+                if key == "company":
+                    p = doc.add_paragraph()
+                    run = p.add_run(value)
+                    run.bold = True
+                    p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+                elif key == "project_title":
+                    # Add the value of "project_title" with bold formatting
+                    p = doc.add_paragraph()
+                    run = p.add_run(value)
+                    run.bold = True
+                    p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+                elif key == "descriptionc":
+                    # Add the value of "descriptionc" without "descriptionc" prefix
+                    doc.add_paragraph(value, style="List Bullet")
+                elif key != "descriptionc" and key != "level" and key != "extracurricularActivities":
+                    if key == "university":
+                        # Add the value of "university" with bold formatting and without a bullet
+                        p = doc.add_paragraph()
+                        run = p.add_run("University: " + value)
+                        run.bold = True
+                        p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+                    else:
+                        doc.add_paragraph(f"{value}", style="List Bullet")
+
+    # Title
+    add_heading_with_format(doc, "Resume", font_size=18, is_bold=True)
+
+    # Contact Information
+    add_heading_with_format(doc, "Contact Information", font_size=16, is_bold=True)
+    doc.add_paragraph("Name: " + data["name"])
+    doc.add_paragraph("Address: " + data["address"])
+    doc.add_paragraph("Email: " + data["email"])
+    doc.add_paragraph("LinkedIn: " + data["linkedin"])
+    doc.add_paragraph("Phone: " + data["phone"])
+
+    # Education section
+    add_details_section(doc, "Education", data["education"])
+
+    # Skills section
+    skills = data["skills"]
+    skills_text = ", ".join(skill["skills"] for skill in skills)
+    add_heading_with_format(doc, "Skills", font_size=14, is_bold=True)
+    doc.add_paragraph(skills_text, style="List Bullet")
+
+    # Work Experience section
+    add_heading_with_format(doc, "Work Experience", font_size=16, is_bold=True)
+    for entry in data["workExperience"]:
+        add_details_section(doc, "", [entry], is_bold_title=False)  # Removed the "Work Entry" heading
+
+    # Projects section
+    add_heading_with_format(doc, "Projects", font_size=16, is_bold=True)
+    for project in data["projects"]:
+        add_details_section(doc, "", [project], is_bold_title=False)  # Removed repeated "Project" heading
+
+    # Save the document to a .docx file
+
+    word_buffer = BytesIO()
+    output_file_path = "generated_resume.docx"
+    doc.save(word_buffer)
+    word_buffer.seek(0)
+
+    return word_buffer
+
+
 @app.route('/resumebuilder', methods=['POST'])
 def form_builder():
     try:

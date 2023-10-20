@@ -122,6 +122,7 @@ We are thrilled to introduce a powerful new feature to JTracker 2.0 – Dockeriz
 - **Isolation**: Docker containers provide isolation, keeping your tool and its dependencies separate from the host system. This enhances security and minimizes conflicts with other applications.
 - **Scalability**: Docker makes it easy to scale JTracker based on your needs. You can manage multiple containers and even orchestrate them for complex applications using tools like Docker Compose or Kubernetes.
 - **Dependency Management**: All JTracker 2.0 dependencies are defined in code within the Docker container. You won't have to worry about the hassle of managing dependencies on your local system anymore.
+- **Faster Development**: The docker compose file has defined profiles for ui and api development. This simplifies the process to setup environment required for local development.
 
 ### Email Notification for Job Application Deadlines
 

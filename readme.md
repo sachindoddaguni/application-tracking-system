@@ -204,32 +204,34 @@ Any details in any table can be modified at any time during the process.
 * [Python](https://www.python.org/downloads/) (recommended >= 3.8)
 * [pip](https://pip.pypa.io/en/stable/installation/) (Latest version 21.3 used as of 11/3)
 * [npm](https://nodejs.org/en/) (Latest version 6.14.4 used as of 11/3)
-### Strongly Recommended:
-* A terminal environment capable of handling bash scripts.
-
-To install all required packages, while within the context of project root directory, run:
-```
-./setup.sh
-```
-This will handle all npm and pip package installations required for both the front and backend.
-
-*If the script says "command not found" or something similar, run chmod +x ./setup.sh. This grants the script execution privileges. Depending on your setup, this may occur for the boot_dockerless files, amongst others. The same command will fix the issue.*
+* Docker
 
 ## Getting Started:
-### Boot:
+### Bring up the whole environment with Docker:
 To run a testing environment, run:
 ```
-./startup.sh
+docker compose --profile all up
 ```
-This will run flask and npm simultaneously, booting both the front and backend. Note - npm takes substantially longer to boot compared to flask.
+This will run all components required for the system. It will spwan up the backend component, frontend component, and the db component.
 ### Shutdown:
-To ensure that flask is no longer occupying a port, run:
 ```
-./shutdown.sh
+docker compose --profile all down
 ```
-This will search for any active process containing "flask" and kill the process.
+This will stop and remove all active containers spawned up by the docker compose file
+### Local UI development:
+```
+docker compose --profile ui-dev down
+```
+This profile spawns up all components except the UI component. This simplifies local development where UI code can be quickly modified and run manually and the dependent components are managed by docker.
+### Local API development:
+```
+docker compose --profile api-dev down
+```
+This profile spawns up all components except the API component. This simplifies local development where API code can be quickly modified and run manually and the dependent components are managed by docker. This requires a small change:
+1. Add db_username env variable in your system with value localhost.
 
 ## Hosting the Database:
+This is required if you are not using docker.
 ### Local MongoDB:
 1. Download [MongoDB Community Server](https://docs.mongodb.com/manual/administration/install-community/)
 2. Follow the [Installion Guide](https://docs.mongodb.com/guides/server/install/)

@@ -8,16 +8,18 @@ from flask_cors import CORS, cross_origin
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
-from itertools import islice
 from webdriver_manager.chrome import ChromeDriverManager
-from bson.json_util import dumps
 import pandas as pd
-import json
 from datetime import datetime, timedelta
 import yaml
 import hashlib
 import uuid
 import os
+from io import BytesIO
+from docx import Document
+from docx.shared import Pt
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+import json
 
 import smtplib
 from email.mime.text import MIMEText
@@ -255,11 +257,11 @@ def create_app():
         # create a url for a crawler to fetch job information
         if salary:
             url = (
-                "https://www.google.com/search?q="
-                + keywords
-                + "%20salary%20"
-                + salary
-                + "&ibp=htl;jobs"
+                    "https://www.google.com/search?q="
+                    + keywords
+                    + "%20salary%20"
+                    + salary
+                    + "&ibp=htl;jobs"
             )
         else:
             url = "https://www.google.com/search?q=" + keywords + "&ibp=htl;jobs"
@@ -612,6 +614,120 @@ def email_reminders():
 sched = BackgroundScheduler(daemon=True)
 sched.add_job(email_reminders,'interval',minutes=60)
 sched.start()
+def generate_pdf(data):
+    doc = Document()
+
+    # Set page margins to fit within one page
+    sections = doc.sections
+    for section in sections:
+        section.left_margin = Pt(36)  # 0.5 inch
+        section.right_margin = Pt(36)  # 0.5 inch
+        section.top_margin = Pt(36)  # 0.5 inch
+        section.bottom_margin = Pt(36)  # 0.5 inch
+
+    # Helper function to add heading with format
+    def add_heading_with_format(doc, text, font_size=16, is_bold=True):
+        p = doc.add_paragraph()
+        run = p.add_run(text)
+        if is_bold:
+            run.bold = True
+        p.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+        run.font.size = Pt(font_size)
+
+    # Function to add details section
+    def add_details_section(doc, section_title, details, is_bold_title=True):
+        if section_title:
+            add_heading_with_format(doc, section_title, font_size=14, is_bold=True)
+        for detail in details:
+            for key, value in detail.items():
+                if key == "company":
+                    p = doc.add_paragraph()
+                    run = p.add_run(value)
+                    run.bold = True
+                    p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+                elif key == "project_title":
+                    # Add the value of "project_title" with bold formatting
+                    p = doc.add_paragraph()
+                    run = p.add_run(value)
+                    run.bold = True
+                    p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+                elif key == "descriptionc":
+                    # Add the value of "descriptionc" without "descriptionc" prefix
+                    doc.add_paragraph(value, style="List Bullet")
+                elif key != "descriptionc" and key != "level" and key != "extracurricularActivities":
+                    if key == "university":
+                        # Add the value of "university" with bold formatting and without a bullet
+                        p = doc.add_paragraph()
+                        run = p.add_run("University: " + value)
+                        run.bold = True
+                        p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+                    else:
+                        doc.add_paragraph(f"{value}", style="List Bullet")
+
+    # Title
+    add_heading_with_format(doc, "Resume", font_size=18, is_bold=True)
+
+    # Contact Information
+    add_heading_with_format(doc, "Contact Information", font_size=16, is_bold=True)
+    doc.add_paragraph("Name: " + data["name"])
+    doc.add_paragraph("Address: " + data["address"])
+    doc.add_paragraph("Email: " + data["email"])
+    doc.add_paragraph("LinkedIn: " + data["linkedin"])
+    doc.add_paragraph("Phone: " + data["phone"])
+
+    # Education section
+    add_details_section(doc, "Education", data["education"])
+
+    # Skills section
+    skills = data["skills"]
+    skills_text = ", ".join(skill["skills"] for skill in skills)
+    add_heading_with_format(doc, "Skills", font_size=14, is_bold=True)
+    doc.add_paragraph(skills_text, style="List Bullet")
+
+    # Work Experience section
+    add_heading_with_format(doc, "Work Experience", font_size=16, is_bold=True)
+    for entry in data["workExperience"]:
+        add_details_section(doc, "", [entry], is_bold_title=False)  # Removed the "Work Entry" heading
+
+    # Projects section
+    add_heading_with_format(doc, "Projects", font_size=16, is_bold=True)
+    for project in data["projects"]:
+        add_details_section(doc, "", [project], is_bold_title=False)  # Removed repeated "Project" heading
+
+    # Save the document to a .docx file
+
+    word_buffer = BytesIO()
+    output_file_path = "generated_resume.docx"
+    doc.save(word_buffer)
+    word_buffer.seek(0)
+
+    return word_buffer
+
+
+@app.route('/resumebuilder', methods=['POST'])
+def form_builder():
+    try:
+        # Assuming the request data is in JSON format
+        data = request.json
+
+        # Log the data (you can customize this part)
+        print("Received Form Data:")
+        for key, value in data.items():
+            print(f"{key}: {value}")
+
+        # Generate PDF
+        pdf_data = generate_pdf(data)
+
+        # Send the PDF file as a response
+        return send_file(pdf_data, mimetype='application/msword', as_attachment=True,
+                         attachment_filename='generated_resume.docx')
+    except Exception as e:
+        print(f"Error processing form data: {str(e)}")
+        return "Error processing form data", 500
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 if __name__ == "__main__":
     app.run()

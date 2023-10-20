@@ -215,6 +215,52 @@ This will handle all npm and pip package installations required for both the fro
 
 *If the script says "command not found" or something similar, run chmod +x ./setup.sh. This grants the script execution privileges. Depending on your setup, this may occur for the boot_dockerless files, amongst others. The same command will fix the issue.*
 
+# J-Tracker 2.0 - Your Job Tracking Assistant
+
+## Troubleshooting
+
+If you encounter issues while using J-Tracker 2.0, here are some common problems and their solutions:
+
+### Problem 1: Unable to Start the Application
+
+**Symptoms:** The application doesn't start, or you encounter an error when trying to run it.
+
+**Solution:**
+1. Ensure you have met the installation requirements mentioned in the README.
+2. Double-check that you have the required versions of Python and npm installed.
+3. Make sure you have executed the setup script using `./setup.sh` to install necessary packages.
+4. Check for any error messages in the console output and address them accordingly.
+
+### Problem 2: Database Connection Issue
+
+**Symptoms:** The application fails to connect to the database, whether local or hosted on MongoDB Atlas.
+
+**Solution:**
+1. Verify that you have followed the instructions for hosting the database correctly, depending on whether you're using a local MongoDB or MongoDB Atlas.
+2. Double-check the connection string in your `app.py` file and ensure it's correct.
+3. If you're using MongoDB Atlas, ensure that you've created an `application.yml` file with the correct credentials.
+4. If you're experiencing issues with repository secrets for CI, make sure they are correctly added in the repository settings.
+
+### Problem 3: Dockerization Issues
+
+**Symptoms:** Problems with Dockerizing the application.
+
+**Solution:**
+1. Ensure you have Docker installed and running.
+2. Check the Docker setup instructions in the README and follow them carefully.
+3. If you encounter issues with containerization, check for any specific error messages and research them or seek help from the project's community.
+
+### Problem 4: Email Notifications Not Working
+
+**Symptoms:** You're not receiving email notifications for job application deadlines.
+
+**Solution:**
+1. Make sure you've set your job application deadlines within the application.
+2. Confirm that your email notification settings are correctly configured.
+3. Check your spam folder for any misplaced notifications.
+4. If you're still facing issues, refer to the project's documentation for the email notification feature or seek help from the project's community.
+
+
 ## Getting Started:
 ### Boot:
 To run a testing environment, run:
@@ -272,7 +318,8 @@ If you have any questions, need help, or want to provide feedback about the J-Tr
 Your inquiries and suggestions are always welcome!
 
 ## Team Members
+- Amogh Mahesh
 - Aditya Chitlangia
 - Abhishek Arun Sheth
 - Sachin Rudrappa Doddaguni
-- Amogh Mahesh
+

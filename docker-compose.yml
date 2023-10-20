@@ -19,6 +19,8 @@ services:
       - all
   db:
     image: mongo
+    ports:
+      -27017:27017
     profiles:
       - ui-dev
       - api-dev

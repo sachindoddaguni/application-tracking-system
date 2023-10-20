@@ -344,7 +344,7 @@ def create_app():
                     message = f"Hello {user.fullName},\n\nA new job application has been added:\nJob Title: {current_application['jobTitle']}\nCompany: {current_application['companyName']}\n\nBest regards,\nYour Application Tracker"
                     send_email(to_email, subject, message)
             except:
-                    return jsonify({"error": "EMAIL wasn't sent"}), 401
+                    return jsonify({"error": "EMAIL wasn't sent"}), 400
             return jsonify(current_application), 200
         except:
             return jsonify({"error": "Internal server error"}), 500
@@ -380,8 +380,17 @@ def create_app():
                         for key, value in request_data.items():
                             application[key] = value
                     updated_applications += [application]
+                    try:
+                    # Send an email notification
+                        to_email = user.email  # Use the user's email address
+                        subject = "Job Application Updated"
+                        message = f"Hello {user.fullName},\n\nThe following job application has been updated:\nJob Title: {application['jobTitle']}\nCompany: {application['companyName']}\n\nBest regards,\nYour Application Tracker"
+                        send_email(to_email, subject, message)
+                    except:
+                        return jsonify({"error": "EMAIL wasn't sent"}), 400
                 if not application_updated_flag:
                     return jsonify({"error": "Application not found"}), 400
+                
                 user.update(applications=updated_applications)
 
             return jsonify(app_to_update), 200
@@ -411,6 +420,14 @@ def create_app():
                 else:
                     app_to_delete = application
                     application_deleted_flag = True
+                    try:
+                        # Send an email notification
+                        to_email = user.email  # Use the user's email address
+                        subject = "Job Application Deleted"
+                        message = f"Hello {user.fullName},\n\nThe following job application has been deleted:\nJob Title: {application['jobTitle']}\nCompany: {application['companyName']}\n\nBest regards,\nYour Application Tracker"
+                        send_email(to_email, subject, message)
+                    except:
+                            return jsonify({"error": "EMAIL wasn't sent"}), 400
 
             if not application_deleted_flag:
                 return jsonify({"error": "Application not found"}), 400
@@ -554,8 +571,8 @@ def get_new_application_id(user_id):
 
 def send_email(to_email, subject, message):
     # Set up your email and password here, or use environment variables
-    gmail_user = "amoghm14@gmail.com"
-    gmail_password = ""
+    gmail_user = "amoghmahesh14@gmail.com"
+    gmail_password = os.getenv("email_password")
 
     msg = MIMEMultipart()
     msg['From'] = gmail_user

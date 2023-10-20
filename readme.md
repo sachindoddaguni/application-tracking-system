@@ -43,6 +43,7 @@ Our application keeps track of the jobs you've added to your wish list. It also 
     + [Local MongoDB](#local-mongodb)
     + [Hosted database with MongoDB Atlas](#hosted-database-with-mongodb-atlas)
 - [Troubleshooting](#troubleshooting)
+- [Project Funding](#project-funding)
 - [License](#license)
 - [How to Contribute](#how-to-contribute)
 - [Team Members](#team-members)

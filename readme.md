@@ -12,7 +12,7 @@ https://user-images.githubusercontent.com/89501363/144725439-5d9191f8-df13-4814-
 
 #      J-Tracker 2.0 - Your Job Tracking Assistant
 
-https://github.com/sachindoddaguni/application-tracking-system/blob/feature/dockerize/JTracker%202.0%20introductory-video.mp4
+https://github.com/sachindoddaguni/application-tracking-system/assets/28365724/05c9b3a1-2487-4249-b160-7eeb24a1ec81
 
 The process of applying for jobs and internships is not a cakewalk. Managing job applications is a time-consuming process. Due to the referrals and deadlines, the entire procedure can be stressful. Our application allows you to track and manage your job application process, as well as regulate it, without the use of cumbersome Excel spreadsheets.
 

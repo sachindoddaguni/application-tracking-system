@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 import yaml
 import hashlib
 import uuid
+import os
 from io import BytesIO
 from docx import Document
 from docx.shared import Pt
@@ -71,9 +72,7 @@ def create_app():
                     return jsonify({"error": "Unauthorized"}), 401
                 userid = token.split(".")[0]
                 user = Users.objects(id=userid).first()
-                print(user)
-                print(token)
-                print(headers)
+
                 if user is None:
                     return jsonify({"error": "Unauthorized"}), 401
 
@@ -89,7 +88,7 @@ def create_app():
                         else:
                             delete_auth_token(tokens, userid)
                         break
-                print(expiry_flag)
+
                 if not expiry_flag:
                     return jsonify({"error": "Unauthorized"}), 401
 
@@ -199,9 +198,7 @@ def create_app():
             auth_tokens_new = user["authTokens"] + [
                 {"token": token, "expiry": expiry_str}
             ]
-            user["authTokens"] = auth_tokens_new
-            print(user)
-            user.save()
+            user.update(authTokens=auth_tokens_new)
             return jsonify({"token": token, "expiry": expiry_str})
         except:
             return jsonify({"error": "Internal server error"}), 500

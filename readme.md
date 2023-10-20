@@ -10,9 +10,9 @@ https://user-images.githubusercontent.com/89501363/144725439-5d9191f8-df13-4814-
 [![Build and Deploy Frontend](https://github.com/kingan1/application-tracking-system/actions/workflows/frontend_CI_CD.yml/badge.svg)](https://github.com/kingan1/application-tracking-system/actions/workflows/frontend_CI_CD.yml)
 [![Super Linter](https://github.com/kingan1/application-tracking-system/actions/workflows/super-linter.yml/badge.svg)](https://github.com/kingan1/application-tracking-system/actions/workflows/super-linter.yml)
 
-#      J-Tracker - Your Job Tracking Assistant
+#      J-Tracker 2.0 - Your Job Tracking Assistant
 
-https://user-images.githubusercontent.com/43064854/135554150-c06afd4e-d223-47e3-b123-b45f9cd1b87a.mp4
+https://github.com/sachindoddaguni/application-tracking-system/assets/28365724/05c9b3a1-2487-4249-b160-7eeb24a1ec81
 
 The process of applying for jobs and internships is not a cakewalk. Managing job applications is a time-consuming process. Due to the referrals and deadlines, the entire procedure can be stressful. Our application allows you to track and manage your job application process, as well as regulate it, without the use of cumbersome Excel spreadsheets.
 
@@ -25,7 +25,9 @@ Our application keeps track of the jobs you've added to your wish list. It also 
 - [Basic Design](#basic-design)
 - [Demo](#demo)
 - [Improvements](#improvements)
-    + [Whats New](#whats-new)
+    + [Resume Builder](#resume-builder)
+    + [Dockerization](#dockerization)
+    + [Email Notification for Job Application Deadlines](#Email-Notification-for-Job-Application-Deadlines)
 - [Roadmap](#roadmap)
 - [Future Scope](#future-scope)
 - [Explanation](#explanation)
@@ -94,8 +96,52 @@ The interface through which a user is able to search for specific jobs based on 
 
 <p align="center"><img width="700" src="./resources/resume.png"></p>
 
+## Improvements
 
-### Whats New
+### Resume Builder
+
+Introducing a powerful new feature! Users can now create a stunning and ATS-friendly resume with minimal effort. The Automatic Resume Builder simplifies the process by providing a user-friendly form for basic information input. The best part? Your resume is generated as an editable Word document, offering full customization to suit your preferences and style.
+
+Key Features:
+- **Effortless Data Entry**: Quickly provide your basic information, education, skills, and more.
+- **ATS-Friendly**: Ensure compatibility with modern hiring systems.
+- **Customization**: Tailor your resume to your preferences.
+- **Time-Saving**: Automate the formatting and editing process.
+
+![image](https://github.com/sachindoddaguni/application-tracking-system/assets/28365724/9849abd8-6636-4a18-a63e-ee18b5f223bd)
+
+
+
+### Dockerization
+
+We are thrilled to introduce a powerful new feature to JTracker 2.0 – Dockerization! This enhancement brings a multitude of advantages, making your experience with JTracker even better.
+
+#### Why Dockerize JTracker 2.0?
+
+- **Simplified Setup**: With JTracker Dockerized, you no longer need to spend time configuring and installing various dependencies. It's as simple as running a single command.
+- **Consistent Environment**: Docker ensures that JTracker runs consistently across different systems. Say goodbye to the "It works on my machine" problem. Now, your application will work seamlessly for everyone.
+- **Easy Deployment**: Sharing your tool with others becomes effortless. Docker containers can be distributed and executed on any platform with Docker support, making collaboration and deployment hassle-free.
+- **Version Control**: Docker allows you to version your JTracker 2.0 containers. This means you can easily switch between different versions or update to the latest release without compatibility concerns.
+- **Isolation**: Docker containers provide isolation, keeping your tool and its dependencies separate from the host system. This enhances security and minimizes conflicts with other applications.
+- **Scalability**: Docker makes it easy to scale JTracker based on your needs. You can manage multiple containers and even orchestrate them for complex applications using tools like Docker Compose or Kubernetes.
+- **Dependency Management**: All JTracker 2.0 dependencies are defined in code within the Docker container. You won't have to worry about the hassle of managing dependencies on your local system anymore.
+- **Faster Development**: The docker compose file has defined profiles for ui and api development. This simplifies the process to setup environment required for local development.
+
+### Email Notification for Job Application Deadlines
+
+We are excited to introduce a game-changing enhancement to J-Tracker 2.0 - the Email Notification feature! Keeping track of upcoming job application deadlines is now more effortless than ever.
+
+#### How It Works 
+- Set your job application deadlines within the application.
+- J-Tracker 2.0 will automatically send you email notifications as your application deadlines approach.
+- Stay organized and never miss an important application deadline again.
+
+#### Benefits
+- **Efficiency:** Receive timely reminders, allowing you to prepare and submit your applications promptly.
+- **Reduced Stress:** No more worrying about missed deadlines or last-minute rushes.
+- **Enhanced Productivity:** Focus on your job search while J-Tracker 2.0 handles the scheduling.
+
+This new feature is designed to streamline your job application process further, making J-Tracker 2.0 your ultimate Job Tracking Assistant. With email notifications for upcoming job application deadlines, you can confidently manage your job search and secure your dream job.
 
 #### Version 1.1
 
@@ -219,11 +265,14 @@ The project is licensed under the [MIT](https://choosealicense.com/licenses/mit/
 ## How to Contribute?
 Please see our CONTRIBUTING.md for instructions on how to contribute to the repository and assist us in improving the project.
 
+## Have Questions or Need Assistance?
+
+If you have any questions, need help, or want to provide feedback about the J-Tracker 2.0, feel free to contact us at aditya.a.chitlangia@gmail.com. We're here to assist you and make your resume creation experience as smooth as possible.
+
+Your inquiries and suggestions are always welcome!
 
 ## Team Members
-- Ashley King
-- Manoj Kumar
-- Rakesh Muppala
-- Sayali Parab
-- Ashwin Das
-- Renji Joseph Sabu 
+- Aditya Chitlangia
+- Abhishek Arun Sheth
+- Sachin Rudrappa Doddaguni
+- Amogh Mahesh

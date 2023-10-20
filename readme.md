@@ -108,6 +108,9 @@ Key Features:
 - **Customization**: Tailor your resume to your preferences.
 - **Time-Saving**: Automate the formatting and editing process.
 
+![image](https://github.com/sachindoddaguni/application-tracking-system/assets/28365724/9849abd8-6636-4a18-a63e-ee18b5f223bd)
+
+
 
 ### Dockerization
 

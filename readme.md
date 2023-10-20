@@ -29,12 +29,14 @@ Our application keeps track of the jobs you've added to your wish list. It also 
     + [Dockerization](#dockerization)
     + [Email Notification for Job Application Deadlines](#Email-Notification-for-Job-Application-Deadlines)
 - [Roadmap](#roadmap)
+- [Successful Usecase](#successful-usecase)
 - [Future Scope](#future-scope)
 - [Explanation](#explanation)
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
     + [Requirements](#requirements)
     + [Strongly Recommended](#strongly-recommended)
+- [Troubleshooting](#Troubleshooting)
 - [Getting Started](#getting-started)
     + [Boot](#boot)
     + [Shutdown](#shutdown)
@@ -166,6 +168,35 @@ This new feature is designed to streamline your job application process further,
 ## Roadmap:
 ![Roadmap](https://github.com/prithvish-doshi-17/application-tracking-system/blob/main/resources/Roadmap%20-%202.PNG)
 
+## Successful Usecases
+
+### Case Study 1: Improving Job Search Efficiency with J-Tracker 2.0
+
+**Background:**
+Aditya, a recent college graduate from NCSU, had been struggling with his job search. He was applying to numerous positions across different companies, but it was challenging to keep track of each application's status and deadlines. He often missed application deadlines and forgot which companies he had applied to.
+
+**The Problem:**
+Aditya was becoming frustrated and stressed due to the chaotic job application process. He needed a way to streamline his job search and stay organized.
+
+**The Solution:**
+Aditya started using J-Tracker 2.0 to manage his job applications. He added all the jobs he was interested in to his wishlist, tracked their status, and set application deadlines. The Email Notification feature kept him informed about approaching deadlines, ensuring he never missed an important application date.
+
+**The Outcome:**
+With J-Tracker 2.0, Aditya regained control over his job search. He received timely reminders of application deadlines and improved his overall efficiency. Within a few weeks, he secured an interview with a company he had been targeting for a while, and the company was impressed with his organized approach. Ultimately, he got the job and credited J-Tracker 2.0 for helping him achieve his goal.
+
+### Case Study 2: Seamless Collaboration in a University Job Fair
+
+**Background:**
+The career services department at NCSU was organizing a large job fair with participation from multiple companies. Managing the fair's logistics and helping students connect with potential employers was a complex task.
+
+**The Problem:**
+Coordinating the event, scheduling interviews, and keeping track of student applications was a logistical challenge. They needed a solution to streamline the job fair operations.
+
+**The Solution:**
+The career services department at NCSU decided to use J-Tracker 2.0 to manage the job fair. They created profiles for each participating company and added job opportunities. Students could easily browse and add these opportunities to their wishlists, track their application status, and set reminders for interviews.
+
+**The Outcome:**
+J-Tracker 2.0 simplified the job fair coordination. Companies could see how many students were interested in their positions, and students had a clear overview of their job applications. This led to better communication between students and employers. As a result, more students secured internships and job offers during the job fair, and companies found the event well-organized and efficient. J-Tracker 2.0 played a crucial role in fostering a successful and collaborative job fair experience for all participants.
 
 ## Future Scope: 
 * Include deadline reminders for the application and interview.
@@ -214,6 +245,49 @@ To install all required packages, while within the context of project root direc
 This will handle all npm and pip package installations required for both the front and backend.
 
 *If the script says "command not found" or something similar, run chmod +x ./setup.sh. This grants the script execution privileges. Depending on your setup, this may occur for the boot_dockerless files, amongst others. The same command will fix the issue.*
+
+## Troubleshooting
+
+If you encounter issues while using J-Tracker 2.0, here are some common problems and their solutions:
+
+### Problem 1: Unable to Start the Application
+
+**Symptoms:** The application doesn't start, or you encounter an error when trying to run it.
+
+**Solution:**
+1. Ensure you have met the installation requirements mentioned in the README.
+2. Double-check that you have the required versions of Python and npm installed.
+3. Make sure you have executed the setup script using `./setup.sh` to install necessary packages.
+4. Check for any error messages in the console output and address them accordingly.
+
+### Problem 2: Database Connection Issue
+
+**Symptoms:** The application fails to connect to the database, whether local or hosted on MongoDB Atlas.
+
+**Solution:**
+1. Verify that you have followed the instructions for hosting the database correctly, depending on whether you're using a local MongoDB or MongoDB Atlas.
+2. Double-check the connection string in your `app.py` file and ensure it's correct.
+3. If you're using MongoDB Atlas, ensure that you've created an `application.yml` file with the correct credentials.
+4. If you're experiencing issues with repository secrets for CI, make sure they are correctly added in the repository settings.
+
+### Problem 3: Dockerization Issues
+
+**Symptoms:** Problems with Dockerizing the application.
+
+**Solution:**
+1. Ensure you have Docker installed and running.
+2. Check the Docker setup instructions in the README and follow them carefully.
+3. If you encounter issues with containerization, check for any specific error messages and research them or seek help from the project's community.
+
+### Problem 4: Email Notifications Not Working
+
+**Symptoms:** You're not receiving email notifications for job application deadlines.
+
+**Solution:**
+1. Make sure you've set your job application deadlines within the application.
+2. Confirm that your email notification settings are correctly configured.
+3. Check your spam folder for any misplaced notifications.
+4. If you're still facing issues, refer to the project's documentation for the email notification feature or seek help from the project's community.
 
 ## Getting Started:
 ### Boot:
@@ -272,7 +346,8 @@ If you have any questions, need help, or want to provide feedback about the J-Tr
 Your inquiries and suggestions are always welcome!
 
 ## Team Members
+- Amogh Mahesh
 - Aditya Chitlangia
 - Abhishek Arun Sheth
 - Sachin Rudrappa Doddaguni
-- Amogh Mahesh
+

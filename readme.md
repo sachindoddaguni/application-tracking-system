@@ -136,6 +136,7 @@ We are thrilled to introduce a powerful new feature to JTracker 2.0 – Dockeriz
 We are excited to introduce a game-changing enhancement to J-Tracker 2.0 - the Email Notification feature! Keeping track of upcoming job application deadlines is now more effortless than ever.
 
 #### How It Works 
+- J-Tracker 2.0 will notify you through an email whenever a new application is created, updated and deleted.
 - Set your job application deadlines within the application.
 - J-Tracker 2.0 will automatically send you email notifications as your application deadlines approach.
 - Stay organized and never miss an important application deadline again.

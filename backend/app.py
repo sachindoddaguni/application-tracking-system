@@ -21,6 +21,11 @@ from docx.shared import Pt
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 import json
 
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from apscheduler.schedulers.background import BackgroundScheduler
+
 existing_endpoints = ["/applications", "/resume"]
 
 
@@ -149,6 +154,7 @@ def create_app():
             print(data)
             try:
                 _ = data["username"]
+                _ = data["email"]
                 _ = data["password"]
                 _ = data["fullName"]
             except:
@@ -157,12 +163,16 @@ def create_app():
             username_exists = Users.objects(username=data["username"])
             if len(username_exists) != 0:
                 return jsonify({"error": "Username already exists"}), 400
+            email_exists = Users.objects(email=data["email"])
+            if len(email_exists) != 0:
+                return jsonify({"error": "Email already exists"}), 400
             password = data["password"]
             password_hash = hashlib.md5(password.encode())
             user = Users(
                 id=get_new_user_id(),
                 fullName=data["fullName"],
                 username=data["username"],
+                email=data["email"],
                 password=password_hash.hexdigest(),
                 authTokens=[],
                 applications=[],
@@ -330,6 +340,14 @@ def create_app():
             applications = user["applications"] + [current_application]
 
             user.update(applications=applications)
+            try:
+                    # Send an email notification
+                    to_email = user.email  # Use the user's email address
+                    subject = "New Job Application Added"
+                    message = f"Hello {user.fullName},\n\nA new job application has been added:\nJob Title: {current_application['jobTitle']}\nCompany: {current_application['companyName']}\n\nBest regards,\nYour Application Tracker"
+                    send_email(to_email, subject, message)
+            except:
+                    return jsonify({"error": "EMAIL wasn't sent"}), 400
             return jsonify(current_application), 200
         except:
             return jsonify({"error": "Internal server error"}), 500
@@ -365,8 +383,17 @@ def create_app():
                         for key, value in request_data.items():
                             application[key] = value
                     updated_applications += [application]
+                    try:
+                    # Send an email notification
+                        to_email = user.email  # Use the user's email address
+                        subject = "Job Application Updated"
+                        message = f"Hello {user.fullName},\n\nThe following job application has been updated:\nJob Title: {application['jobTitle']}\nCompany: {application['companyName']}\n\nBest regards,\nYour Application Tracker"
+                        send_email(to_email, subject, message)
+                    except:
+                        return jsonify({"error": "EMAIL wasn't sent"}), 400
                 if not application_updated_flag:
                     return jsonify({"error": "Application not found"}), 400
+                
                 user.update(applications=updated_applications)
 
             return jsonify(app_to_update), 200
@@ -396,6 +423,14 @@ def create_app():
                 else:
                     app_to_delete = application
                     application_deleted_flag = True
+                    try:
+                        # Send an email notification
+                        to_email = user.email  # Use the user's email address
+                        subject = "Job Application Deleted"
+                        message = f"Hello {user.fullName},\n\nThe following job application has been deleted:\nJob Title: {application['jobTitle']}\nCompany: {application['companyName']}\n\nBest regards,\nYour Application Tracker"
+                        send_email(to_email, subject, message)
+                    except:
+                            return jsonify({"error": "EMAIL wasn't sent"}), 400
 
             if not application_deleted_flag:
                 return jsonify({"error": "Application not found"}), 400
@@ -487,6 +522,7 @@ class Users(db.Document):
     id = db.IntField(primary_key=True)
     fullName = db.StringField()
     username = db.StringField()
+    email    = db.StringField()
     password = db.StringField()
     authTokens = db.ListField()
     applications = db.ListField()
@@ -498,7 +534,7 @@ class Users(db.Document):
 
         :return: JSON object
         """
-        return {"id": self.id, "fullName": self.fullName, "username": self.username}
+        return {"id": self.id, "fullName": self.fullName, "username": self.username, "email": self.email}
 
 
 def get_new_user_id():
@@ -536,6 +572,48 @@ def get_new_application_id(user_id):
 
     return new_id + 1
 
+def send_email(to_email, subject, message):
+    # Set up your email and password here, or use environment variables
+    gmail_user = "amoghmahesh14@gmail.com"
+    gmail_password = os.getenv("email_password")
+
+    msg = MIMEMultipart()
+    msg['From'] = gmail_user
+    msg['To'] = to_email
+    msg['Subject'] = subject
+
+    # Attach the message
+    msg.attach(MIMEText(message, 'plain'))
+
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(gmail_user, gmail_password)
+        text = msg.as_string()
+        server.sendmail(gmail_user, to_email, text)
+        server.quit()
+        print("Email sent successfully!")
+    except Exception as e:
+        print("Email could not be sent. Error: {}".format(str(e)))
+
+def email_reminders():
+    users = Users.objects({})
+    for user in users:
+        current_applications =  user["applications"]
+        for application in current_applications:
+            if application["status"] != 3 or application["status"] != 4:
+                try:
+                    # Send an email reminder
+                    to_email = user.email  # Use the user's email address
+                    subject = "Job Application Reminder"
+                    message = f"Hello {user.fullName},\n\nThe following job application has not been submitted yet.\nJob Title: {application['jobTitle']}\nCompany: {application['companyName']}\nApply By: {application['date']}\n\nBest regards,\nYour Application Tracker"
+                    send_email(to_email, subject, message)
+                except:
+                    return jsonify({"error": "EMAIL wasn't sent"}), 400
+                
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(email_reminders,'interval',minutes=60)
+sched.start()
 def generate_pdf(data):
     doc = Document()
 

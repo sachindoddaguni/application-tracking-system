@@ -32,10 +32,11 @@ export default class LoginPage extends Component{
          
     }
 
-    handleSignup = (fullname, uname, pwd) => {
+    handleSignup = (fullname, uname, email, pwd) => {
         console.log("Signup click");
         let obj = {
             username: uname,
+            email: email,
             password: pwd,
             fullName: fullname
         }
@@ -88,6 +89,11 @@ export default class LoginPage extends Component{
                             </div>
 
                             <div className="form-group">
+                                <label>Email</label>
+                                <input type="text" className="form-control" id="email" placeholder="Enter email" />
+                            </div>
+
+                            <div className="form-group">
                                 <label>Password</label>
                                 <input type="password" className="form-control" id="spwd" placeholder="Enter password" />
                             </div>
@@ -96,8 +102,9 @@ export default class LoginPage extends Component{
                                 e.preventDefault();
                                 let name = document.querySelector("#fullname").value
                                 let uname = document.querySelector("#suname").value
+                                let email = document.querySelector("#email").value
                                 let pwd = document.querySelector("#spwd").value
-                                this.handleSignup(name, uname, pwd)
+                                this.handleSignup(name, uname, email, pwd)
                                 }}  className="btn btn-secondary btn-block">Sign Up</button>
                         </form>
                     </Tab>

@@ -11,7 +11,6 @@ from flask_mongoengine import MongoEngine
 import yaml
 from app import create_app, Users
 
-
 # Pytest fixtures are useful tools for calling resources
 # over and over, without having to manually recreate them,
 # eliminating the possibility of carry-over from previous tests,
@@ -58,6 +57,7 @@ def user(client):
     user.first().save()
     rv = client.post("/users/login", json=data)
     jdata = json.loads(rv.data.decode("utf-8"))
+    print(jdata)
     header = {"Authorization": "Bearer " + jdata["token"]}
     yield user.first(), header
     user.first()["applications"] = []

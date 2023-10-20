@@ -22,6 +22,7 @@ import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from apscheduler.schedulers.background import BackgroundScheduler
 
 existing_endpoints = ["/applications", "/resume"]
 
@@ -592,6 +593,25 @@ def send_email(to_email, subject, message):
         print("Email sent successfully!")
     except Exception as e:
         print("Email could not be sent. Error: {}".format(str(e)))
+
+def email_reminders():
+    users = Users.objects({})
+    for user in users:
+        current_applications =  user["applications"]
+        for application in current_applications:
+            if application["status"] != 3 or application["status"] != 4:
+                try:
+                    # Send an email reminder
+                    to_email = user.email  # Use the user's email address
+                    subject = "Job Application Reminder"
+                    message = f"Hello {user.fullName},\n\nThe following job application has not been submitted yet.\nJob Title: {application['jobTitle']}\nCompany: {application['companyName']}\nApply By: {application['date']}\n\nBest regards,\nYour Application Tracker"
+                    send_email(to_email, subject, message)
+                except:
+                    return jsonify({"error": "EMAIL wasn't sent"}), 400
+                
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(email_reminders,'interval',minutes=60)
+sched.start()
 
 if __name__ == "__main__":
     app.run()

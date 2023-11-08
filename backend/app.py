@@ -508,7 +508,8 @@ with open("application.yml") as f:
     password = info["password"]
     app.config["MONGODB_SETTINGS"] = {
         "db": "appTracker",
-        "host": os.getenv("db_username"),
+        # "host": os.getenv("db_username"),
+        "host": "localhost",
     }
 db = MongoEngine()
 db.init_app(app)

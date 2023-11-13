@@ -79,7 +79,7 @@ function NetworkingPage() {
             <Grid container spacing={4}>
               {contacts.map((contact) => (
                 <Grid item key={contact} xs={12} sm={6} md={4}>
-                  <Card sx={{ height: '95%', display: 'flex', flexDirection: 'column', border: '1px solid #d32f2f' }}>
+                  <Card sx={{ height: '95%', display: 'flex', flexDirection: 'column', border: '1px solid #D3D3D3' }}>
                     <CardContent >
                       <Box display="flex">
                         <Avatar sx={{ mr: 3, mt: 2, ml: 1 }} />

@@ -3,8 +3,8 @@ import { Container, Typography, Button, Box, Paper, Divider, TextField, Card, Gr
 import GroupIcon from '@mui/icons-material/GroupOutlined';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-import { SocialLink, SocialProvider } from '@mui-treasury/components/socialLink';
 
 function NetworkingPage() {
   const [openModal, setOpenModal] = useState(false);
@@ -101,9 +101,9 @@ function NetworkingPage() {
                         <PhoneOutlinedIcon color='disabled' sx={{ mr: 1 }} />
                         <Typography>{contact.phone ? contact.phone : "N/A"}</Typography>
                       </Box>
-                      <Box display="flex" sx={{ ml: -1.5}}>
-                        <SocialProvider><SocialLink brand="LinkedIn" style={{ color: '#D3D3D3' }}/></SocialProvider>
-                        <Typography sx={{ mt: 1.5}}>{contact.linkedin ? contact.linkedin : "N/A"}</Typography>
+                       <Box display="flex" sx={{ mt: 1 }}>
+                        <LinkedInIcon color='disabled' sx={{ mr: 1 }}/>
+                        <Typography>{contact.linkedin ? contact.linkedin : "N/A"}</Typography>
                       </Box>
                     </CardContent>
                     <CardActions>

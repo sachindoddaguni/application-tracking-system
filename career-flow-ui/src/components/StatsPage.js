@@ -27,33 +27,71 @@ import CropSquareIcon from "@mui/icons-material/CropSquare";
 import TodayIcon from "@mui/icons-material/Today";
 import JobFunnelChart from "./JobFunnelChart";
 import JobsCreatedChart from "./JobsCreatedChart";
+import axios from "axios";
 
 function StatsPage(props) {
-  const rows = [
-    {
-      jobTitle: "SDE Intern",
-      company: "Microsoft",
-      status: "Job saved",
-    },
-    {
-      jobTitle: "Dev Intern",
-      company: "HPE",
-      status: "Applied",
-    },
-    {
-      jobTitle: "SDE Intern",
-      company: "Microsoft",
-      status: "Job saved",
-    },
-    {
-      jobTitle: "Dev Intern",
-      company: "HPE",
-      status: "Applied",
-    },
-  ];
+  // 1.073c2f2c-b4d9-455e-9cf2-ae0453736423
+  // lastFourApps should be in the below format
+  // const lastFourApps = [
+  //   {
+  //     jobTitle: "SDE Intern",
+  //     company: "Microsoft",
+  //     status: "Job saved",
+  //   },
+  //   {
+  //     jobTitle: "Dev Intern",
+  //     company: "HPE",
+  //     status: "Applied",
+  //   },
+  //   {
+  //     jobTitle: "SDE Intern",
+  //     company: "Dell",
+  //     status: "Job saved",
+  //   },
+  //   {
+  //     jobTitle: "Dev Intern",
+  //     company: "Lenovo",
+  //     status: "Applied",
+  //   },
+  // ];
+  const [jobAppsStatus, setJobAppsStatus] = useState([]);
+  const [sixMonthAppCount, setSixMonthAppCount] = useState([]);
+  const [lastFourApps, setLastFourApps] = useState([]);
+  const [appsCreated, setAppsCreated] = useState(0);
+  const [interviewsCompleted, setInterviewsCompleted] = useState(0);
+  const [notesTaken, setNotesTaken] = useState(0);
+  const [contactsSaved, setContactsSaved] = useState(0);
+  useEffect(() => {
+    // Make API call to backend to get stats data.
+    axios({
+      method: "GET",
+      url: "/dashboard",
+      headers: {
+        // Authorization: "Bearer " + props.state.token,
+        Authorization: "Bearer 1.4b3cf8e0-2004-4cb2-b1ce-0eede94b97e4",
+      },
+    })
+      .then((response) => {
+        const res = response.data;
+        setJobAppsStatus(res["job_applications_status"])
+        setSixMonthAppCount(res["six_months_jobs_count"])
+        setAppsCreated(res["applications_created"])
+        setInterviewsCompleted(res["interviews_completed"])
+        setNotesTaken(res["notes_taken"])
+        setContactsSaved(res["contacts_saved"])
+        setLastFourApps(res["last_four_apps"])
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
+      });
+  }, []);
   return (
     <>
-      <Container maxWidth>
+      <Container>
         <Box
           sx={{
             display: "grid",
@@ -75,7 +113,7 @@ function StatsPage(props) {
               avatar={<BarChartIcon color="primary" />}
             />
             <CardContent align="center">
-              <JobFunnelChart />
+              <JobFunnelChart jobAppsStatus={jobAppsStatus}/>
             </CardContent>
           </Card>
 
@@ -106,7 +144,7 @@ function StatsPage(props) {
                   <CardContent
                     style={{ alignItems: "center", justifyContent: "center" }}
                   >
-                    <Typography align="center">{50}</Typography>
+                    <Typography align="center">{appsCreated}</Typography>
                   </CardContent>
                 </Card>
                 <Card
@@ -120,7 +158,7 @@ function StatsPage(props) {
                   <CardContent
                     style={{ alignItems: "center", justifyContent: "center" }}
                   >
-                    <Typography align="center">{50}</Typography>
+                    <Typography align="center">{interviewsCompleted}</Typography>
                   </CardContent>
                 </Card>
               </Box>
@@ -142,7 +180,7 @@ function StatsPage(props) {
                   <CardContent
                     style={{ alignItems: "center", justifyContent: "center" }}
                   >
-                    <Typography align="center">{50}</Typography>
+                    <Typography align="center">{contactsSaved}</Typography>
                   </CardContent>
                 </Card>
                 <Card
@@ -156,7 +194,7 @@ function StatsPage(props) {
                   <CardContent
                     style={{ alignItems: "center", justifyContent: "center" }}
                   >
-                    <Typography align="center">{50}</Typography>
+                    <Typography align="center">{notesTaken}</Typography>
                   </CardContent>
                 </Card>
               </Box>
@@ -178,7 +216,7 @@ function StatsPage(props) {
                 alignItems: "center",
               }}
             >
-              <JobsCreatedChart />
+              <JobsCreatedChart sixMonthAppCount={sixMonthAppCount} />
             </CardContent>
           </Card>
 
@@ -206,17 +244,14 @@ function StatsPage(props) {
                         Company
                       </TableCell>
                       <TableCell variant="head" sx={{ color: "#d32f2f" }}>
-                        Action
-                      </TableCell>
-                      <TableCell variant="head" sx={{ color: "#d32f2f" }}>
                         Status
                       </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rows.map((row) => (
+                    {lastFourApps.map((row) => (
                       <TableRow
-                        key={row.name}
+                        key={row.company}
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
                         }}
@@ -225,7 +260,6 @@ function StatsPage(props) {
                           {row.jobTitle}
                         </TableCell>
                         <TableCell>{row.company}</TableCell>
-                        <TableCell>{1}</TableCell>
                         <TableCell>{row.status}</TableCell>
                       </TableRow>
                     ))}

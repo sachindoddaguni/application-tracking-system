@@ -10,39 +10,39 @@ import {
   Legend,
 } from "recharts";
 
-function JobsCreatedChart() {
-  const data = [
-    {
-      Month: "Jun 2023",
-      "Jobs Created": 0,
-    },
-    {
-      Month: "Jul 2023",
-      "Jobs Created": 5,
-    },
-    {
-      Month: "Aug 2023",
-      "Jobs Created": 0,
-    },
-    {
-      Month: "Sep 2023",
-      "Jobs Created": 20,
-    },
-    {
-      Month: "Oct 2023",
-      "Jobs Created": 50,
-    },
-    {
-      Month: "Nov 2023",
-      "Jobs Created": 15,
-    },
-  ];
-  const [weekHistory, setWeekHistory] = useState(data);
+function JobsCreatedChart(props) {
+  // props.sixMonthAppCount should have the below format (ordered from the farthest month first to the most recent month last). Ensure /dashboard api returns this format so there is no processing needed in the frontend.
+  // const data = [
+  //   {
+  //     Month: "Jun 2023",
+  //     "Jobs Created": 0,
+  //   },
+  //   {
+  //     Month: "Jul 2023",
+  //     "Jobs Created": 5,
+  //   },
+  //   {
+  //     Month: "Aug 2023",
+  //     "Jobs Created": 0,
+  //   },
+  //   {
+  //     Month: "Sep 2023",
+  //     "Jobs Created": 20,
+  //   },
+  //   {
+  //     Month: "Oct 2023",
+  //     "Jobs Created": 50,
+  //   },
+  //   {
+  //     Month: "Nov 2023",
+  //     "Jobs Created": 15,
+  //   },
+  // ];
   return (
     <LineChart
       width={700}
       height={250}
-      data={weekHistory}
+      data={props.sixMonthAppCount}
       margin={{
         top: 5,
         right: 30,

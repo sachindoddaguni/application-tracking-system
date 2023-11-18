@@ -28,7 +28,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime, timedelta
 from collections import defaultdict
 
-existing_endpoints = ["/applications", "/resume", "/dashboard"]
+existing_endpoints = ["/applications", "/resume", "/dashboard", "/contacts"]
 
 
 def create_app():
@@ -307,7 +307,9 @@ def create_app():
         """
         try:
             userid = get_userid_from_header()
+            print(f"UserID from header: {userid}")
             user = Users.objects(id=userid).first()
+            print(f"User: {user}")
             applications = user["applications"]
             return jsonify(applications)
         except:
@@ -322,6 +324,7 @@ def create_app():
         """
         try:
             userid = get_userid_from_header()
+            print(f"UserID from header: {userid}")
             try:
                 request_data = json.loads(request.data)["application"]
                 _ = request_data["jobTitle"]
@@ -528,7 +531,63 @@ def create_app():
         except Exception as e:
             print(e)
             return jsonify({"error": "Internal server error"}), 500
+        
 
+    @app.route("/users/contacts", methods=["GET"])
+    def get_contacts():
+        """
+        Retrieves contacts for the logged-in user.
+
+        :return: JSON object with user's contacts
+        """
+        try:
+            userid = get_userid_from_header()
+            print(f"UserID from header: {userid}")
+            user = Users.objects(id=userid).first()
+            if not user:
+                return jsonify({"error": "User not found"}), 404
+            contacts = user.contacts
+            return jsonify({"contacts": contacts}), 200
+        except Exception as e:
+            print(f"Error fetching contacts: {e}")
+            return jsonify({"error": "Unable to fetch contacts"}), 500
+
+
+    @app.route("/users/contacts", methods=["POST"])
+    def add_contact():
+        """
+        Adds a new contact for the user.
+
+        :return: JSON object with status and message
+        """
+        try:
+            userid = get_userid_from_header()
+            print(f"UserID from header: {userid}")
+            user = Users.objects(id=userid).first()
+            if not user:
+                print("User not found")
+                return jsonify({"error": "User not found"}), 404
+
+            data = json.loads(request.data)
+            print(f"Received data: {data}")
+            new_contact = {
+                "firstName": data["firstName"],
+                "lastName": data["lastName"],
+                "jobTitle": data.get("jobTitle", ""),
+                "company": data.get("company", ""),
+                "email": data.get("email", ""),
+                "phone": data.get("phone", ""),
+                "linkedin": data.get("linkedin", "")
+            }
+            print(f"data: {new_contact}")
+            user.contacts.append(new_contact)
+            user.save()
+            print(f"Contact added: {new_contact}")
+            return jsonify({"message": "Contact added successfully", "contact": new_contact}), 200
+        except Exception as e:
+            print(f"Error adding contact: {e}")
+            print(e)
+            return jsonify({"error": "Unable to add contact"}), 500
     return app
 
 
@@ -559,6 +618,7 @@ class Users(db.Document):
     authTokens = db.ListField()
     applications = db.ListField()
     resume = db.FileField()
+    contacts = db.ListField()
 
     def to_json(self):
         """

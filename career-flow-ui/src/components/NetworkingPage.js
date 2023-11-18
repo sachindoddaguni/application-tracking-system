@@ -1,14 +1,50 @@
-import React, { useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Container, Typography, Button, Box, Paper, Divider, TextField, Card, Grid, CardContent, CardActions, Avatar } from '@mui/material';
 import GroupIcon from '@mui/icons-material/GroupOutlined';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import axios from 'axios';
 
 function NetworkingPage() {
   const [openModal, setOpenModal] = useState(false);
-  const hasContacts = true;
+
+  const [newContact, setNewContact] = useState({
+    firstName: '',
+    lastName: '',
+    jobTitle: '',
+    companyName: '',
+    email: '',
+    phone: '',
+    linkedin: '',
+  });
+
+  const [contacts, setContacts] = useState([]);
+
+  useEffect(() => {
+    fetchContacts();
+  }, []);
+
+  const fetchContacts = () => {
+    axios.get('/users/contacts', {
+      headers: {
+        // Include your authorization token here
+        // Authorization: "Bearer " + props.state.token,
+        Authorization: "Bearer 2.748341fd-02b0-4fe8-8350-7b4f408c82cc"
+      }
+    })
+      .then(response => {
+        setContacts(response.data.contacts);
+      })
+      .catch(error => {
+        console.error('Error fetching contacts:', error);
+      });
+  };
+
+  const handleInputChange = (e) => {
+    setNewContact({ ...newContact, [e.target.name]: e.target.value });
+  };
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -19,47 +55,37 @@ function NetworkingPage() {
   };
 
   const handleSaveModal = () => {
-    setOpenModal(false);
-  };
-
-  const contacts = [
-    {
-      "firstName": "Amrita",
-      "lastName": "Visalam",
-      "jobTitle": "Technical Consultant",
-      "companyName": "Microsoft",
-      "email": "avisala@microsoft.com",
-      "phone": "7878343478",
-      "linkedin": "www.linkedin.com/in/amritavisalam/"
-    },
-    {
-      "firstName": "Sphurthy",
-      "lastName": "Satish",
-      "jobTitle": "Student",
-      "companyName": "NCSU",
-      "email": "ssatish@microsoft.com",
-      "phone": "9978343478",
-      "linkedin": ""
-    },
-    {
-      "firstName": "Amrita",
-      "lastName": "Visalam",
-      "jobTitle": "Technical Consultant",
-      "companyName": "Microsoft",
-      "email": "avisala@microsoft.com",
-      "phone": "7878343478",
-      "linkedin": "www.linkedin.com/in/amritavisalam/"
-    },
-    {
-      "firstName": "Sphurthy",
-      "lastName": "Satish",
-      "jobTitle": "",
-      "companyName": "",
-      "email": "ssatish@microsoft.com",
-      "phone": "",
-      "linkedin": "www.linkedin.com/in/ssatish/"
+    if (!newContact.firstName.trim() || !newContact.lastName.trim()) {
+      alert('First Name and Last Name are required.');
+      return;
     }
-  ]
+
+    axios.post('/users/contacts', newContact, {
+      headers: {
+        'Content-Type': 'application/json',
+        // Authorization: "Bearer " + props.state.token,
+        Authorization: "Bearer 2.748341fd-02b0-4fe8-8350-7b4f408c82cc"
+      }
+    })
+      .then(response => {
+        setContacts([...contacts, response.data.contact]);
+        resetForm();
+      })
+      .catch(error => console.error('Error:', error))
+      .finally(() => setOpenModal(false));
+    };
+
+  const resetForm = () => {
+    setNewContact({
+      firstName: '',
+      lastName: '',
+      jobTitle: '',
+      companyName: '',
+      email: '',
+      phone: '',
+      linkedin: '',
+    });
+  };
 
   return (
     <div>
@@ -74,7 +100,7 @@ function NetworkingPage() {
         </Box>
         <Divider sx={{ mb: 10 }} />
 
-        {hasContacts ? (
+        {contacts.length > 0 ? (
           <Container maxWidth="lg">
             <Grid container spacing={4}>
               {contacts.map((contact) => (
@@ -101,8 +127,8 @@ function NetworkingPage() {
                         <PhoneOutlinedIcon color='disabled' sx={{ mr: 1 }} />
                         <Typography>{contact.phone ? contact.phone : "N/A"}</Typography>
                       </Box>
-                       <Box display="flex" sx={{ mt: 1 }}>
-                        <LinkedInIcon color='disabled' sx={{ mr: 1 }}/>
+                      <Box display="flex" sx={{ mt: 1 }}>
+                        <LinkedInIcon color='disabled' sx={{ mr: 1 }} />
                         <Typography>{contact.linkedin ? contact.linkedin : "N/A"}</Typography>
                       </Box>
                     </CardContent>
@@ -131,16 +157,16 @@ function NetworkingPage() {
         <DialogContent>
           <Box display="flex" flexDirection="column" alignItems="center" p={2}>
             <Box display="flex" justifyContent="space-between" width="100%">
-              <TextField fullWidth label="First Name" required placeholder="i.e: John" margin="dense" sx={{ mr: 2, width: '50%' }} />
-              <TextField fullWidth label="Last Name" required placeholder="i.e: Smith" margin="dense" sx={{ ml: 2, width: '50%' }} />
+              <TextField fullWidth label="First Name" name="firstName" value={newContact.firstName} required onChange={handleInputChange} placeholder="i.e: John" margin="dense" sx={{ mr: 2, width: '50%' }} />
+              <TextField fullWidth label="Last Name" name="lastName" value={newContact.lastName} required onChange={handleInputChange} placeholder="i.e: Smith" margin="dense" sx={{ ml: 2, width: '50%' }} />
             </Box>
             <Box display="flex" justifyContent="space-between" width="100%">
-              <TextField fullWidth label="Job Title" placeholder="i.e: CEO" margin="dense" sx={{ mr: 2, width: '50%' }} />
-              <TextField fullWidth label="Company" placeholder="add location" margin="dense" sx={{ ml: 2, width: '50%' }} />
+              <TextField fullWidth label="Job Title" name="jobTitle" value={newContact.jobTitle} onChange={handleInputChange} placeholder="i.e: CEO" margin="dense" sx={{ mr: 2, width: '50%' }} />
+              <TextField fullWidth label="Company" name="company" value={newContact.company} onChange={handleInputChange} placeholder="add company" margin="dense" sx={{ ml: 2, width: '50%' }} />
             </Box>
-            <TextField fullWidth label="Email" margin="dense" />
-            <TextField fullWidth label="Phone" margin="dense" />
-            <TextField fullWidth label="LinkedIn" margin="dense" />
+            <TextField fullWidth onChange={handleInputChange} label="Email" name="email" value={newContact.email} margin="dense" />
+            <TextField fullWidth onChange={handleInputChange} label="Phone" name="phone" value={newContact.phone} margin="dense" />
+            <TextField fullWidth onChange={handleInputChange} label="LinkedIn" name="linkedin" value={newContact.linkedin} margin="dense" />
           </Box>
         </DialogContent>
         <DialogActions>

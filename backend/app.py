@@ -545,7 +545,6 @@ def create_app():
             contacts = user.contacts
             return jsonify({"contacts": contacts}), 200
         except Exception as e:
-            print(f"Error fetching contacts: {e}")
             return jsonify({"error": "Unable to fetch contacts"}), 500
 
 
@@ -560,7 +559,6 @@ def create_app():
             userid = get_userid_from_header()
             user = Users.objects(id=userid).first()
             if not user:
-                print("User not found")
                 return jsonify({"error": "User not found"}), 404
 
             data = json.loads(request.data)

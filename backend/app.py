@@ -307,9 +307,7 @@ def create_app():
         """
         try:
             userid = get_userid_from_header()
-            print(f"UserID from header: {userid}")
             user = Users.objects(id=userid).first()
-            print(f"User: {user}")
             applications = user["applications"]
             return jsonify(applications)
         except:
@@ -324,7 +322,6 @@ def create_app():
         """
         try:
             userid = get_userid_from_header()
-            print(f"UserID from header: {userid}")
             try:
                 request_data = json.loads(request.data)["application"]
                 _ = request_data["jobTitle"]
@@ -542,7 +539,6 @@ def create_app():
         """
         try:
             userid = get_userid_from_header()
-            print(f"UserID from header: {userid}")
             user = Users.objects(id=userid).first()
             if not user:
                 return jsonify({"error": "User not found"}), 404
@@ -562,14 +558,12 @@ def create_app():
         """
         try:
             userid = get_userid_from_header()
-            print(f"UserID from header: {userid}")
             user = Users.objects(id=userid).first()
             if not user:
                 print("User not found")
                 return jsonify({"error": "User not found"}), 404
 
             data = json.loads(request.data)
-            print(f"Received data: {data}")
             new_contact = {
                 "firstName": data["firstName"],
                 "lastName": data["lastName"],
@@ -579,13 +573,10 @@ def create_app():
                 "phone": data.get("phone", ""),
                 "linkedin": data.get("linkedin", "")
             }
-            print(f"data: {new_contact}")
             user.contacts.append(new_contact)
             user.save()
-            print(f"Contact added: {new_contact}")
             return jsonify({"message": "Contact added successfully", "contact": new_contact}), 200
         except Exception as e:
-            print(f"Error adding contact: {e}")
             print(e)
             return jsonify({"error": "Unable to add contact"}), 500
     return app

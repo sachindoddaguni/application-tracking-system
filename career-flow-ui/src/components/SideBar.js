@@ -23,6 +23,8 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import { Button } from "@mui/material";
 import { updateAppState } from "../appReducer/applicationReducer";
 import axios from "axios";
+import useToken from "./authentication/useToken.js";
+
 
 const drawerWidth = 200;
 
@@ -125,35 +127,29 @@ export default function SideBar(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  const { removeToken } = useToken();
   const handleLogOut = () => {
-    const updateLoggedOutState = {
-      token: null,
-      loggedIn: false,
-    };
-    props.dispatchReducer(updateAppState(updateLoggedOutState));
-    console.log("Log Out Successful");
-    // axios({
-    //   method: "POST",
-    //   url: "UPDATE_THIS",
-    // })
-    //   .then((response) => {
-    //     // Remove token from local storage
-    //     // removeToken();
-    //     const updateLoggedOutState = {
-    //       token: null,
-    //       loggedIn: false,
-    //     };
-    //     props.dispatchReducer(updateAppState(updateLoggedOutState));
-    //   })
-    //   .catch((error) => {
-    //     if (error.response) {
-    //       console.log(error.response);
-    //       console.log(error.response.status);
-    //       console.log(error.response.headers);
-    //       console.log("Failed to log out correctly.");
-    //     }
-    //   });
+   handleDrawerClose()
+    axios({
+      method: "POST",
+      url: "/logout",
+    })
+      .then((response) => {
+        removeToken();
+        const updateLoggedOutState = {
+          token: null,
+          loggedIn: false,
+        };
+        props.dispatchReducer(updateAppState(updateLoggedOutState));
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          console.log("Failed to log out correctly.");
+        }
+      });
   };
 
   return (

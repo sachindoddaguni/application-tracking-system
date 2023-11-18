@@ -6,7 +6,6 @@ flask-cors
 webdriver-manager
 PyYAML
 # Flask Framework
-Flask==1.1.2
 selenium==3.0.2
 wheel==0.36.2
 flask-mongoengine==1.0.0
@@ -17,8 +16,6 @@ gunicorn
 flask-cors
 webdriver-manager
 PyYAML
-# Flask Framework
-Flask==1.1.2
 selenium==3.0.2
 wheel==0.36.2
 flask-mongoengine==1.0.0
@@ -31,7 +28,17 @@ webdriver-manager
 PyYAML
 jinja2<3.1.0
 itsdangerous==2.0.1
-Werkzeug==2.0.3
+Werkzeug==2.2.2
 apscheduler==3.10.4
 reportlab==3.5.67
 python-docx==1.0.1
+
+
+Flask==2.2.5
+python_dotenv==0.21.1
+flask_jwt_extended==4.5.3
+bcrypt==4.0.1
+flask_pymongo==2.3.0
+mongomock==4.1.2
+flasgger==0.9.7.1
+coverage==7.2.7

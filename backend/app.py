@@ -25,8 +25,10 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from apscheduler.schedulers.background import BackgroundScheduler
+from datetime import datetime, timedelta
+from collections import defaultdict
 
-existing_endpoints = ["/applications", "/resume"]
+existing_endpoints = ["/applications", "/resume", "/dashboard"]
 
 
 def create_app():
@@ -498,6 +500,35 @@ def create_app():
         except:
             return jsonify({"error": "Internal server error"}), 500
 
+    @app.route("/dashboard", methods=["GET"])
+    def get_dashboard_data():
+        """
+        Gets user's stats data from the database
+
+        :return: JSON object with stats data
+        """
+        try:
+            userid = get_userid_from_header()
+            user = Users.objects(id=userid).first()
+            applications = user["applications"]
+            job_app_status, applications_created, interviews_completed = get_job_app_status(applications)
+            six_months_job_count = get_last_six_months_job_counts(applications)
+            last_four_apps = get_last_four_jobs(applications)
+            contacts_saved = 10
+            notes_taken = 15
+            return jsonify({
+                "six_months_jobs_count": six_months_job_count,
+                "job_applications_status": job_app_status,
+                "applications_created": applications_created,
+                "interviews_completed": interviews_completed,
+                "contacts_saved": contacts_saved,
+                "notes_taken": notes_taken,
+                "last_four_apps": last_four_apps
+            }),200
+        except Exception as e:
+            print(e)
+            return jsonify({"error": "Internal server error"}), 500
+
     return app
 
 
@@ -727,8 +758,103 @@ def form_builder():
         return "Error processing form data", 500
 
 
+def get_job_app_status(applications):
+    job_app_status = {
+        "Jobs Saved": 0,
+        "Applications": 0,
+        "Interviews": 0,
+        "Offers": 0,
+    }
+    for application in applications:
+        # if application["status"]=="Job Saved":
+        if int(application["status"]) == 1:
+            job_app_status["Jobs Saved"] += 1
+        # elif application["status"]=="Applications":
+        elif int(application["status"]) == 2:
+            job_app_status["Applications"] += 1
+            job_app_status["Jobs Saved"] += 1
+        # elif application["status"]=="Interviews":
+        elif int(application["status"]) == 3:
+            job_app_status["Interviews"] += 1
+            job_app_status["Applications"] += 1
+            job_app_status["Jobs Saved"] += 1
+        # elif application["status"]=="Offers":
+        elif int(application["status"]) == 4:
+            job_app_status["Offers"] += 1
+            job_app_status["Interviews"] += 1
+            job_app_status["Applications"] += 1
+            job_app_status["Jobs Saved"] += 1
+    res = [
+        {"name": "Jobs Saved", "count": job_app_status["Jobs Saved"]},
+        {"name": "Applications", "count": job_app_status["Applications"]},
+        {"name": "Interviews", "count": job_app_status["Interviews"]},
+        {"name": "Offers", "count": job_app_status["Offers"]},
+    ]
+    return res,job_app_status["Applications"],job_app_status["Interviews"]
+
+def get_last_six_months_job_counts(applications):
+    month_map = {
+        index + 1: val
+        for index, val in enumerate(
+            [
+                "Jan", "Feb", "Mar", "Apr",
+                "May", "Jun", "Jul", "Aug",
+                "Sep", "Oct", "Nov", "Dec",
+            ]
+        )
+    }
+    # Create a defaultdict to store date strings for each month
+    result_dict = defaultdict(list)
+    # Get the current date
+    current_date = (datetime.now().replace(day=1) + timedelta(days=32)).replace(day=1)
+    # Iterate over the last six months
+    for i in range(6):
+        # Calculate the start and end date of the current month
+        end_of_month = current_date.replace(day=1) - timedelta(days=1)
+        start_of_month = end_of_month.replace(day=1)
+        # Filter date objects that belong to the current month
+        current_month_dates = [
+            datetime.strptime(application["date"], "%Y-%m-%d").strftime("%Y-%m-%d")
+            for application in applications
+            if start_of_month
+            <= datetime.strptime(application["date"], "%Y-%m-%d")
+            <= end_of_month
+        ]
+        # Store the result in the dictionary
+        result_dict[
+            "%s %s" % (month_map[start_of_month.month], start_of_month.year)
+        ] = len(current_month_dates)
+        # Move to the previous month
+        current_date = start_of_month
+    res = [
+        {"Month": key, "Jobs Created": result_dict[key]}
+        for key in list(result_dict.keys())[::-1]
+    ]
+    return res
+
+def get_last_four_jobs(applications):
+    # apps = defaultdict(list)
+    # for application in applications:
+    #     if datetime.strptime(application["date"], "%Y-%m-%d") not in apps:
+    #         apps[datetime.strptime(application["date"], "%Y-%m-%d")] = []
+    #     apps[datetime.strptime(application["date"], "%Y-%m-%d")].append(application)
+    appStatus = {'1': "Job Saved", '2': "Applied", '3': "Interviewed", '4':"Offered"}
+    apps = sorted(applications, key=lambda application: datetime.strptime(application["date"], "%Y-%m-%d"), reverse=True)[:4]
+    for app in apps:
+        print(app)
+    res = [
+        {
+            "jobTitle": application["jobTitle"],
+            "company": application["companyName"],
+            "status": appStatus[application["status"]],
+        }
+        for application in apps
+    ]
+    print(res)
+    return res
+
 if __name__ == '__main__':
     app.run(debug=True)
 
-if __name__ == "__main__":
-    app.run()
+# if __name__ == "__main__":
+#     app.run()

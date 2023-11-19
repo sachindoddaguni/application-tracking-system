@@ -48,7 +48,7 @@ from flasgger import Swagger
 
 
 
-existing_endpoints = ["/applications", "/resume", "/dashboard", "/token", "/register"]
+existing_endpoints = ["/applications", "/resume", "/dashboard", "/contacts", "/token", "/register"]
 
 
 
@@ -509,7 +509,58 @@ def create_app():
         except Exception as e:
             print(e)
             return jsonify({"error": "Internal server error"}), 500
+        
 
+    @app.route("/users/contacts", methods=["GET"])
+    @jwt_required()
+    def get_contacts():
+        """
+        Retrieves contacts for the logged-in user.
+
+        :return: JSON object with user's contacts
+        """
+        try:
+            current_user = get_jwt_identity()
+            user = Users.objects(email=current_user).first()
+            if not user:
+                return jsonify({"error": "User not found"}), 404
+            contacts = user.contacts
+            return jsonify({"contacts": contacts}), 200
+        except Exception as e:
+            return jsonify({"error": "Unable to fetch contacts"}), 500
+
+
+    @app.route("/users/contacts", methods=["POST"])
+    @jwt_required()
+    def add_contact():
+        """
+        Adds a new contact for the user.
+
+        :return: JSON object with status and message
+        """
+        try:
+            current_user_id = get_jwt_identity()
+            user = Users.objects(email=current_user_id).first()
+            if not user:
+                return jsonify({"error": "User not found"}), 404
+
+            data = json.loads(request.data)
+            new_contact = {
+                "firstName": data["firstName"],
+                "lastName": data["lastName"],
+                "jobTitle": data.get("jobTitle", ""),
+                "company": data.get("company", ""),
+                "email": data.get("email", ""),
+                "phone": data.get("phone", ""),
+                "linkedin": data.get("linkedin", "")
+            }
+            user.contacts.append(new_contact)
+            user.save()
+            return jsonify({"message": "Contact added successfully", "contact": new_contact}), 200
+        except Exception as e:
+            print(e)
+            return jsonify({"error": "Unable to add contact"}), 500
+        
     return app
 
 
@@ -537,6 +588,7 @@ class Users(db.Document):
     email    = db.StringField()
     password = db.StringField()
     applications = db.ListField()
+    contacts = db.ListField()
 
     def to_json(self):
         """

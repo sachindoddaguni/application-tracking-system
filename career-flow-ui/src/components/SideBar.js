@@ -20,6 +20,7 @@ import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import DescriptionIcon from "@mui/icons-material/Description";
 import GroupsIcon from "@mui/icons-material/Groups";
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import { Button } from "@mui/material";
 import { updateAppState } from "../appReducer/applicationReducer";
 import axios from "axios";
@@ -235,6 +236,37 @@ export default function SideBar(props) {
             </ListItem>
           ))}
         </List>
+        <List sx={{ marginTop: 'auto' }}>
+        <ListItem
+          disablePadding
+          sx={{ display: "block", margin: "25px 0" }}
+        >
+          <ListItemButton
+            component="a"
+            href="/contactus"
+            sx={{
+              minHeight: 48,
+              justifyContent: open ? "initial" : "center",
+              px: 2.5,
+              textDecoration: "none",
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 3 : "auto",
+                justifyContent: "center",
+              }}
+            >
+              <SupportAgentIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Contact Us"
+              sx={{ opacity: open ? 1 : 0 }}
+            />
+          </ListItemButton>
+        </ListItem>
+      </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />

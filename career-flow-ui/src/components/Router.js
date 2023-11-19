@@ -9,6 +9,7 @@ import StatsPage from "./StatsPage";
 import NetworkingPage from "./NetworkingPage";
 import ResumePage from "./ResumePage";
 import useToken from "./authentication/useToken.js";
+import ContactUsPage from "./ContactUsPage";
 
 const initialAppState = {
   loggedIn: false,
@@ -43,6 +44,9 @@ function Router() {
       <Route path="/signin">
         <SignIn dispatchReducer={dispatchReducer} />
       </Route>
+      <PrivateRoute appState={appState} dispatchReducer={dispatchReducer} path="/contactus">
+        <ContactUsPage appState={appState} dispatchReducer={dispatchReducer} />
+      </PrivateRoute>
       <PrivateRoute appState={appState} dispatchReducer={dispatchReducer} path="/networking">
         <NetworkingPage appState={appState} dispatchReducer={dispatchReducer} />
       </PrivateRoute>

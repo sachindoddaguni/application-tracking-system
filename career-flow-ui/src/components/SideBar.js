@@ -20,9 +20,12 @@ import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import DescriptionIcon from "@mui/icons-material/Description";
 import GroupsIcon from "@mui/icons-material/Groups";
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import { Button } from "@mui/material";
 import { updateAppState } from "../appReducer/applicationReducer";
 import axios from "axios";
+import useToken from "./authentication/useToken.js";
+
 
 const drawerWidth = 200;
 
@@ -125,35 +128,29 @@ export default function SideBar(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  const { removeToken } = useToken();
   const handleLogOut = () => {
-    const updateLoggedOutState = {
-      token: null,
-      loggedIn: false,
-    };
-    props.dispatchReducer(updateAppState(updateLoggedOutState));
-    console.log("Log Out Successful");
-    // axios({
-    //   method: "POST",
-    //   url: "UPDATE_THIS",
-    // })
-    //   .then((response) => {
-    //     // Remove token from local storage
-    //     // removeToken();
-    //     const updateLoggedOutState = {
-    //       token: null,
-    //       loggedIn: false,
-    //     };
-    //     props.dispatchReducer(updateAppState(updateLoggedOutState));
-    //   })
-    //   .catch((error) => {
-    //     if (error.response) {
-    //       console.log(error.response);
-    //       console.log(error.response.status);
-    //       console.log(error.response.headers);
-    //       console.log("Failed to log out correctly.");
-    //     }
-    //   });
+   handleDrawerClose()
+    axios({
+      method: "POST",
+      url: "/logout",
+    })
+      .then((response) => {
+        removeToken();
+        const updateLoggedOutState = {
+          token: null,
+          loggedIn: false,
+        };
+        props.dispatchReducer(updateAppState(updateLoggedOutState));
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          console.log("Failed to log out correctly.");
+        }
+      });
   };
 
   return (
@@ -239,6 +236,37 @@ export default function SideBar(props) {
             </ListItem>
           ))}
         </List>
+        <List sx={{ marginTop: 'auto' }}>
+        <ListItem
+          disablePadding
+          sx={{ display: "block", margin: "25px 0" }}
+        >
+          <ListItemButton
+            component="a"
+            href="/contactus"
+            sx={{
+              minHeight: 48,
+              justifyContent: open ? "initial" : "center",
+              px: 2.5,
+              textDecoration: "none",
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 3 : "auto",
+                justifyContent: "center",
+              }}
+            >
+              <SupportAgentIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Contact Us"
+              sx={{ opacity: open ? 1 : 0 }}
+            />
+          </ListItemButton>
+        </ListItem>
+      </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />

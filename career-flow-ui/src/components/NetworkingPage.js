@@ -7,7 +7,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import axios from 'axios';
 
-function NetworkingPage() {
+function NetworkingPage(props) {
   const [openModal, setOpenModal] = useState(false);
 
   const [newContact, setNewContact] = useState({
@@ -29,9 +29,7 @@ function NetworkingPage() {
   const fetchContacts = () => {
     axios.get('/users/contacts', {
       headers: {
-        // Include your authorization token here
-        // Authorization: "Bearer " + props.state.token,
-        Authorization: "Bearer 2.748341fd-02b0-4fe8-8350-7b4f408c82cc"
+        Authorization: "Bearer " + props.appState.token,
       }
     })
       .then(response => {
@@ -63,8 +61,7 @@ function NetworkingPage() {
     axios.post('/users/contacts', newContact, {
       headers: {
         'Content-Type': 'application/json',
-        // Authorization: "Bearer " + props.state.token,
-        Authorization: "Bearer 2.748341fd-02b0-4fe8-8350-7b4f408c82cc"
+        Authorization: "Bearer " + props.appState.token,
       }
     })
       .then(response => {

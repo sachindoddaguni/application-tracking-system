@@ -512,6 +512,7 @@ def create_app():
         
 
     @app.route("/users/contacts", methods=["GET"])
+    @jwt_required()
     def get_contacts():
         """
         Retrieves contacts for the logged-in user.
@@ -519,8 +520,8 @@ def create_app():
         :return: JSON object with user's contacts
         """
         try:
-            userid = get_userid_from_header()
-            user = Users.objects(id=userid).first()
+            current_user = get_jwt_identity()
+            user = Users.objects(email=current_user).first()
             if not user:
                 return jsonify({"error": "User not found"}), 404
             contacts = user.contacts
@@ -530,6 +531,7 @@ def create_app():
 
 
     @app.route("/users/contacts", methods=["POST"])
+    @jwt_required()
     def add_contact():
         """
         Adds a new contact for the user.
@@ -537,8 +539,8 @@ def create_app():
         :return: JSON object with status and message
         """
         try:
-            userid = get_userid_from_header()
-            user = Users.objects(id=userid).first()
+            current_user_id = get_jwt_identity()
+            user = Users.objects(email=current_user_id).first()
             if not user:
                 return jsonify({"error": "User not found"}), 404
 
@@ -558,6 +560,7 @@ def create_app():
         except Exception as e:
             print(e)
             return jsonify({"error": "Unable to add contact"}), 500
+        
     return app
 
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Typography, Link} from '@mui/material';
+import Footer from './Footer';
 
 
 const ContactUsPage = (props) => {
@@ -25,6 +26,7 @@ const ContactUsPage = (props) => {
           We will respond to you as soon as we can!
         </Typography>
       </Container>
+      < Footer/>
     </div>
   );
 };

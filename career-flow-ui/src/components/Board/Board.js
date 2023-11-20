@@ -7,12 +7,13 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import ChecklistOutlinedIcon from '@mui/icons-material/ChecklistOutlined';
 import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
+import { yellow } from "@mui/material/colors";
 
 const stagesData = [
-  { name: "Wishlist", id: 1, icon: <StarBorderIcon /> },
-  { name: "Applied", id: 2, icon: <ChecklistOutlinedIcon /> },
-  { name: "Interview", id: 3, icon: <WorkOutlineOutlinedIcon /> },
-  { name: "Rejected", id: 4, icon: <ThumbDownOutlinedIcon />}
+  { name: "Wishlist", id: 1, icon: <StarBorderIcon />, color: "blue"},
+  { name: "Applied", id: 2, icon: <ChecklistOutlinedIcon />, color: "#fffde7" },
+  { name: "Interview", id: 3, icon: <WorkOutlineOutlinedIcon />, color: "green"},
+  { name: "Rejected", id: 4, icon: <ThumbDownOutlinedIcon />, color: "red"}
 ];
 const taskData = [
   {

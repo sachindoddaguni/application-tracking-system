@@ -5,7 +5,7 @@ on:
     branches:
       - "main"
     paths:   
-      - 'frontend/**'
+      - 'career-flow-ui/**'
 
 jobs:
   build:
@@ -21,13 +21,13 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: frontend/
+        working-directory: career-flow-ui/
       - name: Build
         run: npm run build
-        working-directory: frontend/
+        working-directory: career-flow-ui/
       
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.1
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: frontend/build # The folder the action should deploy.
+          folder: career-flow-ui/build # The folder the action should deploy.

@@ -1,14 +1,23 @@
 .card-task {
     margin-bottom: 25px;
     width:250px;
-    color: #fff;
-    background-color: #6c757d !important;
-    border-color: #6c757d !important;
+    color: #2c2929;
+    background-color: #ffffff !important;
     cursor: move;
+  }
+
+  .card-header.stage-header h6 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* height: 100%;  */
+    font-weight: bold;
+    font-family: 'Roboto', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    letter-spacing: 2px;
   }
   
   .stage-header {
-    background-color: #ccc !important;
+    background-color: #ffffff !important;
   }
   .card-task-option i {
     color: #fff !important;

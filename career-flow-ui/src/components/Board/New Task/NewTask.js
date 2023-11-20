@@ -54,8 +54,8 @@ function NewTask(props) {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        New Task
+      <Button variant="contained" style={{ backgroundColor: "#d32f2f", color: "whitesmoke" }} onClick={handleShow}>
+        NEW TASK
       </Button>
       <TaskForm taskState='New' show={show} handleClose={handleClose} initialValues={initialValues} onSubmit={onSubmit}></TaskForm>
     </>

@@ -2,13 +2,17 @@ import React, { useState, useEffect, useReducer, createContext } from "react";
 import NewTask from "./New Task/NewTask";
 import BoardLanes from "./BoardLanes";
 import "./Board.css";
-import { Container, Typography, Button, Box, Paper, Divider, TextField, Card, Grid, CardContent, CardActions, Avatar } from '@mui/material';
+import { Container, Typography, Box, Divider } from '@mui/material';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import ChecklistOutlinedIcon from '@mui/icons-material/ChecklistOutlined';
+import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
+import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 
 const stagesData = [
-  { name: "Wish List", id: 1 },
-  { name: "Applied", id: 2 },
-  { name: "Interview", id: 3 },
-  { name: "Rejected", id: 4 }
+  { name: "Wishlist", id: 1, icon: <StarBorderIcon /> },
+  { name: "Applied", id: 2, icon: <ChecklistOutlinedIcon /> },
+  { name: "Interview", id: 3, icon: <WorkOutlineOutlinedIcon /> },
+  { name: "Rejected", id: 4, icon: <ThumbDownOutlinedIcon />}
 ];
 const taskData = [
   {
@@ -158,24 +162,21 @@ function Board(props) {
   };
 
   return (
-    <div className="container-fluid pt-3">
-      <div className="row">
-        <Box display="flex" maxjustifyContent="space-between" alignItems="center" my={5}>
+    <div>
+      <Container maxWidth="xl">
+        <Box display="flex" justifyContent="space-between" my={4}>
           <Typography variant="h4" component="h1">
-            My Network
+            Job Tracker
           </Typography>
-            <NewTask variant="contained" color="primary" state={props.appState}  addNewTask={onAddingNewTask}/>
+            <NewTask state={props.appState} addNewTask={onAddingNewTask} />
         </Box>
-        <Divider sx={{ mb: 10 }} />
-      </div>
-      <hr />
-      <div className="row">
-        <div className="col-12">
+        <Divider sx={{ mb: 5 }} />
+        </Container>
+      <Box display="flex" justifyContent="center" alignItems="center">
             <BoardContext.Provider value={ContextData}>
                 <BoardLanes state={props.appState} stages={stages}  ></BoardLanes>
             </BoardContext.Provider>
-        </div>
-      </div>
+      </Box>
     </div>
   );
 }

@@ -31,7 +31,8 @@ function BoardLanes(props) {
               onDrop={(event) => onTaskContainerDropHandler(event, stage.id)}
             >
               <div className="card bg-light">
-                <div className="card-header stage-header">
+                <div className="card-header stage-header" >
+                  {stage.icon}
                   <h6 className="card-title text-uppercase text-truncate py-2">
                     {stage.name}
                   </h6>

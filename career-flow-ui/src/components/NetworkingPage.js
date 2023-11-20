@@ -101,7 +101,7 @@ function NetworkingPage(props) {
           <Container maxWidth="lg">
             <Grid container spacing={4}>
               {contacts.map((contact) => (
-                <Grid item key={contact} xs={12} sm={6} md={4}>
+                <Grid item key={contact.id} xs={12} sm={6} md={4}>
                   <Card sx={{ height: '95%', display: 'flex', flexDirection: 'column', border: '1px solid #D3D3D3' }}>
                     <CardContent >
                       <Box display="flex">
@@ -117,15 +117,15 @@ function NetworkingPage(props) {
                       </Box>
                       <Divider sx={{ mt: 2, mb: 2 }} />
                       <Box display="flex" sx={{ mb: 1 }}>
-                        <MailOutlinedIcon color='disabled' sx={{ mr: 1 }} />
+                        <MailOutlinedIcon color='disabled' sx={{ mr: 1 }} aria-hidden="true" />
                         <Typography>{contact.email ? contact.email : "N/A"}</Typography>
                       </Box>
                       <Box display="flex">
-                        <PhoneOutlinedIcon color='disabled' sx={{ mr: 1 }} />
+                        <PhoneOutlinedIcon color='disabled' sx={{ mr: 1 }} aria-hidden="true" />
                         <Typography>{contact.phone ? contact.phone : "N/A"}</Typography>
                       </Box>
                       <Box display="flex" sx={{ mt: 1 }}>
-                        <LinkedInIcon color='disabled' sx={{ mr: 1 }} />
+                        <LinkedInIcon color='disabled' sx={{ mr: 1 }} aria-hidden="true" />
                         <Typography>{contact.linkedin ? contact.linkedin : "N/A"}</Typography>
                       </Box>
                     </CardContent>
@@ -154,16 +154,16 @@ function NetworkingPage(props) {
         <DialogContent>
           <Box display="flex" flexDirection="column" alignItems="center" p={2}>
             <Box display="flex" justifyContent="space-between" width="100%">
-              <TextField fullWidth label="First Name" name="firstName" value={newContact.firstName} required onChange={handleInputChange} placeholder="i.e: John" margin="dense" sx={{ mr: 2, width: '50%' }} />
-              <TextField fullWidth label="Last Name" name="lastName" value={newContact.lastName} required onChange={handleInputChange} placeholder="i.e: Smith" margin="dense" sx={{ ml: 2, width: '50%' }} />
+              <TextField fullWidth label="First Name" name="firstName" value={newContact.firstName} required onChange={handleInputChange} placeholder="i.e: John" margin="dense" sx={{ mr: 2, width: '50%' }} inputProps={{ 'aria-label': 'First Name' }} />
+              <TextField fullWidth label="Last Name" name="lastName" value={newContact.lastName} required onChange={handleInputChange} placeholder="i.e: Smith" margin="dense" sx={{ ml: 2, width: '50%' }} inputProps={{ 'aria-label': 'Last Name' }} />
             </Box>
             <Box display="flex" justifyContent="space-between" width="100%">
-              <TextField fullWidth label="Job Title" name="jobTitle" value={newContact.jobTitle} onChange={handleInputChange} placeholder="i.e: CEO" margin="dense" sx={{ mr: 2, width: '50%' }} />
-              <TextField fullWidth label="Company" name="company" value={newContact.company} onChange={handleInputChange} placeholder="add company" margin="dense" sx={{ ml: 2, width: '50%' }} />
+              <TextField fullWidth label="Job Title" name="jobTitle" value={newContact.jobTitle} onChange={handleInputChange} placeholder="i.e: CEO" margin="dense" sx={{ mr: 2, width: '50%' }} inputProps={{ 'aria-label': 'Job Title' }} />
+              <TextField fullWidth label="Company" name="company" value={newContact.company} onChange={handleInputChange} placeholder="add company" margin="dense" sx={{ ml: 2, width: '50%' }} inputProps={{ 'aria-label': 'Company' }} />
             </Box>
-            <TextField fullWidth onChange={handleInputChange} label="Email" name="email" value={newContact.email} margin="dense" />
-            <TextField fullWidth onChange={handleInputChange} label="Phone" name="phone" value={newContact.phone} margin="dense" />
-            <TextField fullWidth onChange={handleInputChange} label="LinkedIn" name="linkedin" value={newContact.linkedin} margin="dense" />
+            <TextField fullWidth onChange={handleInputChange} label="Email" name="email" value={newContact.email} margin="dense" inputProps={{ 'aria-label': 'Email' }} />
+            <TextField fullWidth onChange={handleInputChange} label="Phone" name="phone" value={newContact.phone} margin="dense" inputProps={{ 'aria-label': 'Phone' }} />
+            <TextField fullWidth onChange={handleInputChange} label="LinkedIn" name="linkedin" value={newContact.linkedin} margin="dense" inputProps={{ 'aria-label': 'LinkedIn' }}/>
           </Box>
         </DialogContent>
         <DialogActions>

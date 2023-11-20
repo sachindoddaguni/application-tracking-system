@@ -10,10 +10,10 @@ import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import { yellow } from "@mui/material/colors";
 
 const stagesData = [
-  { name: "Wishlist", id: 1, icon: <StarBorderIcon />, color: "blue"},
-  { name: "Applied", id: 2, icon: <ChecklistOutlinedIcon />, color: "#fffde7" },
-  { name: "Interview", id: 3, icon: <WorkOutlineOutlinedIcon />, color: "green"},
-  { name: "Rejected", id: 4, icon: <ThumbDownOutlinedIcon />, color: "red"}
+  { name: "Wishlist", id: 1, icon: <StarBorderIcon />, color: "#B8E8FC"},
+  { name: "Applied", id: 2, icon: <ChecklistOutlinedIcon />, color: "#FFF6BD" },
+  { name: "Interview", id: 3, icon: <WorkOutlineOutlinedIcon />, color: "#C7DCA7"},
+  { name: "Rejected", id: 4, icon: <ThumbDownOutlinedIcon />, color: "#FFC5C5"}
 ];
 const taskData = [
   {

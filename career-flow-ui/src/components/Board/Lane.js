@@ -9,7 +9,7 @@ function Lane(props) {
         taskState
           .filter(x => x.stage === props.stage.id)
           .map((item, index) => (
-            <div draggable
+            <div className="card-item-container" draggable
               key={index}
               onDragStart={(event) =>
                 onDragStartHandler(event, item.id, props.stage.id)

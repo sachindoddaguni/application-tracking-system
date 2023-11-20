@@ -1,29 +1,43 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { BoardContext } from "./Board";
-import { Card } from "react-bootstrap";
 import TaskForm from "./New Task/TaskForm";
+import { Card, CardContent, Typography, IconButton, CardActions } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles({
+  cardHover: {
+    position: 'relative',
+    '&:hover $cardActions': {
+      display: 'block'
+    }
+  },
+  cardActions: {
+    display: 'none',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)' // Optional: add background for visibility
+  },
+  smallIcon: {
+    fontSize: '16px' 
+  }
+});
+
+// Function to format the date
 const formateDate = (date) => {
-  var months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
+  const months = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
   ];
 
-  var month = months[date.getMonth()];
-  var day = "" + date.getDate();
+  const month = months[date.getMonth()];
+  let day = "" + date.getDate();
 
   if (day.length < 2) day = "0" + day;
 
-  return month + " " + day + ", " + date.getFullYear();
+  return `${month} ${day}, ${date.getFullYear()}`;
 };
 
 const initialEditedValues = {
@@ -34,14 +48,14 @@ const initialEditedValues = {
   jobLink: "",
   location: ""
 };
- 
+
 function CardItem(props) {
+  const classes = useStyles();
   const [show, setShow] = useState(false);
   const [editedValues, setFormValues] = useState(initialEditedValues);
+  const { taskState, onDeletingTask, onUpdatingTask } = useContext(BoardContext);
+
   const handleClose = () => setShow(false);
-  const { taskState, onDeletingTask, onUpdatingTask } = useContext(
-    BoardContext
-  );
 
   const handleShow = () => {
     setShow(true);
@@ -49,9 +63,7 @@ function CardItem(props) {
 
   const clickHandler = (type) => {
     if (type === "edit") {
-     var formValues=  taskState.find((task) => {
-       return task.id===props.task.id
-      });
+      const formValues = taskState.find((task) => task.id === props.task.id);
       setFormValues(formValues);
       handleShow();
     } else if (type === "delete") {
@@ -74,36 +86,27 @@ function CardItem(props) {
         show={show}
         handleClose={handleClose}
         onSubmit={handleUpdate}
-      ></TaskForm>
-      <Card key={props.task.id} className="card-task">
-        <Card.Body>
-          <Card.Title>
-            {props.task.companyName}{" "}
-            <div className="card-task-option pull-right">
-              <a onClick={() => clickHandler("edit")}>
-                <i className="fas fa-edit"></i>
-              </a>
-              &nbsp;
-              <a onClick={() => clickHandler("delete")}>
-                <i className="fas fa-trash"></i>
-              </a>
-            </div>
-          </Card.Title>
-
-          <table>
-            <tbody>
-              <tr>
-                <td className="font-weight-bold">{props.task.jobTitle}</td>
-              </tr>
-              <tr>
-                <td className="font-weight-bold">Date:</td>
-                <td className="pull-right">
-                  {formateDate(props.task.date)}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </Card.Body>
+      />
+      <Card key={props.task.id} variant="outlined" className={classes.cardHover}>
+        <CardContent>
+          <Typography variant="h5" component="div">
+            {props.task.companyName}
+          </Typography>
+          <Typography variant="body2">
+            {props.task.jobTitle}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Date: {formateDate(new Date(props.task.date))}
+          </Typography>
+        </CardContent>
+        <CardActions className={classes.cardActions}>
+          <IconButton onClick={() => clickHandler("edit")} aria-label="edit">
+            <EditIcon className={classes.smallIcon} />
+          </IconButton>
+          <IconButton onClick={() => clickHandler("delete")} aria-label="delete">
+            <DeleteIcon className={classes.smallIcon} />
+          </IconButton>
+        </CardActions>
       </Card>
     </>
   );

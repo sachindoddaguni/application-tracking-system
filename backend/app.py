@@ -20,7 +20,8 @@ from docx import Document
 from docx.shared import Pt
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 import json
-
+from flask_pymongo import PyMongo, ObjectId
+from io import BytesIO
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -472,22 +473,25 @@ def create_app():
         """
         try:
             current_user = get_jwt_identity()
+            print(current_user,'hello')
             user = Users.objects(email=current_user).first()
+            print(user.resume,'userr')
+
             try:
                 if len(user.resume.read()) == 0:
                     raise FileNotFoundError
                 else:
-                    print('1')
                     user.resume.seek(0)
             except:
                 return jsonify({"error": "resume could not be found"}), 400
             
+            print('user.resume.filename',user.resume.filename)
+            file_like_object = BytesIO(user.resume.read())
             if hasattr(user, 'resume'):
-                print('2')
                 response = send_file(
-                user.resume,
+                file_like_object,
                 mimetype="application/pdf",
-                attachment_filename="resume.pdf",
+                attachment_filename= user.resume.filename,
                 as_attachment=True,
                 )
                 response.headers["x-filename"] = "resume.pdf"
@@ -606,6 +610,10 @@ class Users(db.Document):
     applications = db.ListField()
     contacts = db.ListField()
     resume = db.FileField()
+
+class ResumeDocument(db.Document):
+    content = db.BinaryField()
+    filename = db.StringField()
 
     def to_json(self):
         """

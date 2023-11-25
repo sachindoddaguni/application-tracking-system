@@ -8,12 +8,14 @@ import ChecklistOutlinedIcon from '@mui/icons-material/ChecklistOutlined';
 import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import { yellow } from "@mui/material/colors";
+import axios from 'axios';
+
 
 const stagesData = [
-  { name: "Wishlist", id: 1, icon: <StarBorderIcon />, color: "#B8E8FC"},
-  { name: "Applied", id: 2, icon: <ChecklistOutlinedIcon />, color: "#FFF6BD" },
-  { name: "Interview", id: 3, icon: <WorkOutlineOutlinedIcon />, color: "#C7DCA7"},
-  { name: "Rejected", id: 4, icon: <ThumbDownOutlinedIcon />, color: "#FFC5C5"}
+  { name: "Wishlist", id: "1", icon: <StarBorderIcon />, color: "#B8E8FC"},
+  { name: "Applied", id: "2", icon: <ChecklistOutlinedIcon />, color: "#FFF6BD" },
+  { name: "Interview", id: "3", icon: <WorkOutlineOutlinedIcon />, color: "#C7DCA7"},
+  { name: "Rejected", id: "4", icon: <ThumbDownOutlinedIcon />, color: "#FFC5C5"}
 ];
 const taskData = [
   {
@@ -79,12 +81,29 @@ function reducer(state, action) {
   }
 }
 function Board(props) {
-  const [taskState, dispatch] = useReducer(reducer, taskData);
+  const [toggleReload, setToggleReload] = useState(false);
+  const [taskState, dispatch] = useReducer(reducer, []);
   const [stages, setStage] = useState(stagesData);
 
+  const reload = () => {
+    setToggleReload(!toggleReload)
+  }
+
   useEffect(() => {
-    dispatch({ type: "LOAD_DATA", payload: taskState });
-  }, [taskState, stages]);
+   
+    axios.get('/applications', {
+      headers: {
+        Authorization: "Bearer " + props.appState.token,
+      }
+    })
+      .then(response => {
+        dispatch({ type: "LOAD_DATA", payload: response.data });
+      })
+      .catch(error => {
+        console.error('Error fetching application:', error);
+      });
+
+  }, [stages, toggleReload]);
 
   const onDragStartHandler = (
     event,
@@ -169,7 +188,7 @@ function Board(props) {
           <Typography variant="h4" component="h1">
             Job Tracker
           </Typography>
-            <NewTask state={props.appState} addNewTask={onAddingNewTask} />
+            <NewTask state={props.appState} addNewTask={onAddingNewTask} reload={reload} />
         </Box>
         <Divider sx={{ mb: 5 }} />
         </Container>

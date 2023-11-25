@@ -155,12 +155,15 @@ def create_app():
 
         :return: JSON object with application data
         """
+        print("In get data")
         try:
-            userid = get_userid_from_header()
-            user = Users.objects(id=userid).first()
+            user_email = get_jwt_identity()
+            users = Users.objects()
+            user = users.filter(email=user_email).first()
             applications = user["applications"]
             return jsonify(applications)
-        except:
+        except Exception as e:
+            print(e)
             return jsonify({"error": "Internal server error"}), 500
 
     @app.route("/applications", methods=["POST"])
@@ -173,20 +176,24 @@ def create_app():
         """
         
         try:
-            current_user = get_jwt_identity()
-
-            user = Users.objects(id=current_user).first()
+            current_user_email = get_jwt_identity()
+            print("User: ------ ", current_user_email)
+            users = Users.objects()
+            user = users.filter(email=current_user_email).first()
+            print("User: ------ ", user.email)
             current_application = {
-                "id": get_new_application_id(current_user),
+                "id": get_new_application_id(user),
                 "jobTitle": request.json.get('jobTitle', None),
                 "companyName": request.json.get('companyName', None),
                 "date": request.json.get('date', None),
                 "jobLink": request.json.get('jobLink', None),
                 "location": request.json.get('location', None),
-                "status": request.json.get("status", "1"),
+                "stage": request.json.get("status", "1"),
             }
             print(current_application)
             applications = user["applications"] + [current_application]
+            user["applications"] = applications
+            user.save()
             return jsonify(current_application), 200
         except Exception as ex:
             return jsonify({"error": ex}), 500
@@ -200,13 +207,14 @@ def create_app():
         :return: JSON object with status and message
         """
         try:
-            userid = get_userid_from_header()
+            user_email = get_jwt_identity()
             try:
                 request_data = json.loads(request.data)["application"]
             except:
                 return jsonify({"error": "No fields found in input"}), 400
 
-            user = Users.objects(id=userid).first()
+            users = Users.objects()
+            user = users.filter(email=user_email).first()
             current_applications = user["applications"]
 
             if len(current_applications) == 0:
@@ -248,8 +256,9 @@ def create_app():
         :return: JSON object with status and message
         """
         try:
-            userid = get_userid_from_header()
-            user = Users.objects(id=userid).first()
+            user_email = get_jwt_identity()
+            users = Users.objects()
+            user = users.filter(email=user_email).first()
 
             current_applications = user["applications"]
 
@@ -286,13 +295,14 @@ def create_app():
         :return: JSON object with status and message
         """
         try:
-            userid = get_userid_from_header()
+            user_email = get_jwt_identity()
             try:
                 file = request.files["file"].read()
             except:
                 return jsonify({"error": "No resume file found in the input"}), 400
 
-            user = Users.objects(id=userid).first()
+            users = Users.objects()
+            user = users.filter(email=user_email).first()
             if not user.resume.read():
                 # There is no file
                 user.resume.put(file)
@@ -344,8 +354,9 @@ def create_app():
         :return: JSON object with stats data
         """
         try:
-            userid = get_userid_from_header()
-            user = Users.objects(id=userid).first()
+            user_email = get_jwt_identity()
+            users = Users.objects()         
+            user = users.filter(email=user_email).first()
             applications = user["applications"]
             job_app_status, applications_created, interviews_completed = get_job_app_status(applications)
             six_months_job_count = get_last_six_months_job_counts(applications)
@@ -420,11 +431,17 @@ def create_app():
 
 
 app = create_app()
-with open("application.yml") as f:
-    info = yaml.load(f, Loader=yaml.FullLoader)
-    username = info["username"]
-    password = info["password"]
-    app.config["MONGODB_SETTINGS"] = {
+# with open("application.yml") as f:
+#     info = yaml.load(f, Loader=yaml.FullLoader)
+#     username = info["username"]
+#     password = info["password"]
+#     app.config["MONGODB_SETTINGS"] = {
+#         "db": "appTracker",
+#         # "host": os.getenv("db_username"),
+#         "host": "localhost",
+#     }
+
+app.config["MONGODB_SETTINGS"] = {
         "db": "appTracker",
         # "host": os.getenv("db_username"),
         "host": "localhost",
@@ -471,14 +488,13 @@ def get_new_user_id():
     return new_id + 1
 
 
-def get_new_application_id(user_id):
+def get_new_application_id(user):
     """
     Returns the next value to be used for new application
 
     :param: user_id: User id of the active user
     :return: key with new application_id
     """
-    user = Users.objects(id=user_id).first()
 
     if len(user["applications"]) == 0:
         return 1
@@ -739,7 +755,7 @@ def get_last_four_jobs(applications):
     return res
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
 
 # if __name__ == "__main__":
 #     app.run()

@@ -72,6 +72,8 @@ function CardItem(props) {
   };
 
   const handleUpdate = (values, submitProps) => {
+
+    console.log(values)
     submitProps.setSubmitting(false);
     onUpdatingTask(values);
     setShow(false);

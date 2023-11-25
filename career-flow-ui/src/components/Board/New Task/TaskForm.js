@@ -22,6 +22,7 @@ function TaskForm(props) {
         initialValues={props.editedValues|| props.initialValues}
         validationSchema={validationSchema}
         onSubmit={props.onSubmit}
+        setValues={props.setValues}
         enableReinitialize
       >
         {(formik) => {

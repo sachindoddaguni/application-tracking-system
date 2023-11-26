@@ -20,7 +20,8 @@ from docx import Document
 from docx.shared import Pt
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 import json
-
+from flask_pymongo import PyMongo, ObjectId
+from io import BytesIO
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -45,7 +46,7 @@ from bson import json_util
 from pymongo import MongoClient
 from flasgger import Swagger
 
-
+from io import BytesIO
 
 
 existing_endpoints = ["/applications", "/resume", "/dashboard", "/contacts", "/token", "/register"]
@@ -423,6 +424,7 @@ def create_app():
             return jsonify({"error": "Internal server error"}), 500
 
     @app.route("/resume", methods=["POST"])
+    @jwt_required()
     def upload_resume():
         """
         Uploads resume file or updates an existing resume for the user
@@ -430,28 +432,30 @@ def create_app():
         :return: JSON object with status and message
         """
         try:
-            userid = get_userid_from_header()
+            current_user = get_jwt_identity()
+            user = Users.objects(email=current_user).first()
+
             try:
-                file = request.files["file"].read()
+                file = request.files["file"]
             except:
                 return jsonify({"error": "No resume file found in the input"}), 400
-
-            user = Users.objects(id=userid).first()
-            if not user.resume.read():
+ 
+            if not hasattr(user, 'resume'):
                 # There is no file
-                user.resume.put(file)
+                user.resume.put(file.stream, content_type=file.content_type, filename=file.filename)
                 user.save()
                 return jsonify({"message": "resume successfully uploaded"}), 200
             else:
                 # There is a file, we are replacing it
-                user.resume.replace(file)
+                user.resume.replace(file.stream, content_type=file.content_type, filename=file.filename)
                 user.save()
                 return jsonify({"message": "resume successfully replaced"}), 200
         except Exception as e:
             print(e)
             return jsonify({"error": "Internal server error"}), 500
 
-    @app.route("/resume", methods=["GET"])
+    @app.route("/downloadresume", methods=["GET"])
+    @jwt_required()
     def get_resume():
         """
         Retrieves the resume file for the user
@@ -459,26 +463,60 @@ def create_app():
         :return: response with file
         """
         try:
-            userid = get_userid_from_header()
+            current_user = get_jwt_identity()
+            user = Users.objects(email=current_user).first()
+
             try:
-                user = Users.objects(id=userid).first()
                 if len(user.resume.read()) == 0:
                     raise FileNotFoundError
                 else:
                     user.resume.seek(0)
             except:
                 return jsonify({"error": "resume could not be found"}), 400
-
-            response = send_file(
-                user.resume,
+        
+            file_like_object = BytesIO(user.resume.read())
+            if hasattr(user, 'resume'):
+                response = send_file(
+                file_like_object,
                 mimetype="application/pdf",
-                attachment_filename="resume.pdf",
+                download_name = user.resume.filename,
                 as_attachment=True,
+                )
+                response.headers["x-filename"] = "resume.pdf"
+                response.headers["Access-Control-Expose-Headers"] = "x-filename"
+                return response, 200
+            
+        except Exception as ex:
+                print(ex)
+                return jsonify({"error": "Internal server error"}), 500
+
+    @app.route("/fetchresume", methods=["GET"])
+    @jwt_required()
+    def fetch_resume():
+        """
+        Retrieves the resume file for the user and sends it back in a way that
+        can be displayed in an iframe on the client-side.
+
+        :return: response with file
+        """
+        try:
+            current_user = get_jwt_identity()
+            user = Users.objects(email=current_user).first()
+
+            if not hasattr(user, 'resume') or user.resume.length == 0:
+                return jsonify({"error": "No resume uploaded"}), 404
+
+            user.resume.seek(0)  # Reset the file pointer to the beginning
+            file_like_object = BytesIO(user.resume.read())
+
+            return send_file(
+                file_like_object,
+                mimetype="application/pdf",
+                as_attachment=False  # Set to False for inline display
             )
-            response.headers["x-filename"] = "resume.pdf"
-            response.headers["Access-Control-Expose-Headers"] = "x-filename"
-            return response, 200
-        except:
+
+        except Exception as ex:
+            print(ex)
             return jsonify({"error": "Internal server error"}), 500
 
     @app.route("/dashboard", methods=["GET"])
@@ -589,6 +627,11 @@ class Users(db.Document):
     password = db.StringField()
     applications = db.ListField()
     contacts = db.ListField()
+    resume = db.FileField()
+
+class ResumeDocument(db.Document):
+    content = db.BinaryField()
+    filename = db.StringField()
 
     def to_json(self):
         """

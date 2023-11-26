@@ -1,4 +1,3 @@
-https://user-images.githubusercontent.com/89501363/144725439-5d9191f8-df13-4814-aa15-99cd752ab0cc.mp4
 
 [![GitHub license](https://img.shields.io/github/license/kingan1/application-tracking-system)](https://github.com/kingan1/application-tracking-system/blob/main/LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10158209.svg)](https://doi.org/10.5281/zenodo.10158209)
@@ -12,7 +11,6 @@ https://user-images.githubusercontent.com/89501363/144725439-5d9191f8-df13-4814-
 
 #      J-Tracker 2.0 - Your Job Tracking Assistant
 
-https://github.com/sachindoddaguni/application-tracking-system/assets/28365724/05c9b3a1-2487-4249-b160-7eeb24a1ec81
 
 The process of applying for jobs and internships is not a cakewalk. Managing job applications is a time-consuming process. Due to the referrals and deadlines, the entire procedure can be stressful. Our application allows you to track and manage your job application process, as well as regulate it, without the use of cumbersome Excel spreadsheets.
 
@@ -43,7 +41,6 @@ Our application keeps track of the jobs you've added to your wish list. It also 
     + [Local MongoDB](#local-mongodb)
     + [Hosted database with MongoDB Atlas](#hosted-database-with-mongodb-atlas)
 - [Troubleshooting](#troubleshooting)
-- [Project Funding](#project-funding)
 - [License](#license)
 - [How to Contribute](#how-to-contribute)
 - [Team Members](#team-members)
@@ -339,9 +336,6 @@ If you encounter issues while using J-Tracker 2.0, here are some common problems
 3. Check your spam folder for any misplaced notifications.
 4. If you're still facing issues, refer to the project's documentation for the email notification feature or seek help from the project's community.
 
-## Project Funding
-
-Our project is currently not funded and operates on a volunteer and open-source basis. The improvement of the project relies solely on the dedication of our team and contributions from the open-source community.
 
 ## License
 The project is licensed under the [MIT](https://choosealicense.com/licenses/mit/) license. 

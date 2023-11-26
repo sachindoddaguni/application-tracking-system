@@ -431,27 +431,18 @@ def create_app():
 
         :return: JSON object with status and message
         """
-        print('hi')
         try:
             current_user = get_jwt_identity()
             user = Users.objects(email=current_user).first()
 
-            userr = Users()
-            #print(user.resume)
             try:
                 file = request.files["file"]
             except:
                 return jsonify({"error": "No resume file found in the input"}), 400
-            
-            print('hi2 ')
  
             if not hasattr(user, 'resume'):
                 # There is no file
-                print('hi3')
-
                 user.resume.put(file.stream, content_type=file.content_type, filename=file.filename)
-
-                #user.resume.put(file)
                 user.save()
                 return jsonify({"message": "resume successfully uploaded"}), 200
             else:
@@ -463,7 +454,7 @@ def create_app():
             print(e)
             return jsonify({"error": "Internal server error"}), 500
 
-    @app.route("/resume", methods=["GET"])
+    @app.route("/downloadresume", methods=["GET"])
     @jwt_required()
     def get_resume():
         """
@@ -473,9 +464,7 @@ def create_app():
         """
         try:
             current_user = get_jwt_identity()
-            print(current_user,'hello')
             user = Users.objects(email=current_user).first()
-            print(user.resume,'userr')
 
             try:
                 if len(user.resume.read()) == 0:
@@ -484,22 +473,51 @@ def create_app():
                     user.resume.seek(0)
             except:
                 return jsonify({"error": "resume could not be found"}), 400
-            
-            print('user.resume.filename',user.resume.filename)
+        
             file_like_object = BytesIO(user.resume.read())
             if hasattr(user, 'resume'):
                 response = send_file(
                 file_like_object,
                 mimetype="application/pdf",
-                attachment_filename= user.resume.filename,
+                download_name = user.resume.filename,
                 as_attachment=True,
                 )
                 response.headers["x-filename"] = "resume.pdf"
                 response.headers["Access-Control-Expose-Headers"] = "x-filename"
                 return response, 200
             
-        except:
+        except Exception as ex:
+                print(ex)
                 return jsonify({"error": "Internal server error"}), 500
+
+    @app.route("/fetchresume", methods=["GET"])
+    @jwt_required()
+    def fetch_resume():
+        """
+        Retrieves the resume file for the user and sends it back in a way that
+        can be displayed in an iframe on the client-side.
+
+        :return: response with file
+        """
+        try:
+            current_user = get_jwt_identity()
+            user = Users.objects(email=current_user).first()
+
+            if not hasattr(user, 'resume') or user.resume.length == 0:
+                return jsonify({"error": "No resume uploaded"}), 404
+
+            user.resume.seek(0)  # Reset the file pointer to the beginning
+            file_like_object = BytesIO(user.resume.read())
+
+            return send_file(
+                file_like_object,
+                mimetype="application/pdf",
+                as_attachment=False  # Set to False for inline display
+            )
+
+        except Exception as ex:
+            print(ex)
+            return jsonify({"error": "Internal server error"}), 500
 
     @app.route("/dashboard", methods=["GET"])
     def get_dashboard_data():

@@ -155,7 +155,6 @@ def create_app():
 
         :return: JSON object with application data
         """
-        print("In get data")
         try:
             user_email = get_jwt_identity()
             users = Users.objects()
@@ -190,7 +189,6 @@ def create_app():
                 "location": request.json.get('location', None),
                 "stage": request.json.get("status", "1"),
             }
-            print(current_application)
             applications = user["applications"] + [current_application]
             user["applications"] = applications
             user.save()
@@ -199,55 +197,36 @@ def create_app():
             return jsonify({"error": ex}), 500
 
     @app.route("/applications/<int:application_id>", methods=["PUT"])
+    @jwt_required()
     def update_application(application_id):
-        """
-        Updates the existing job application for the user
-
-        :param application_id: Application id to be modified
-        :return: JSON object with status and message
-        """
         try:
             user_email = get_jwt_identity()
-            try:
-                request_data = json.loads(request.data)["application"]
-            except:
-                return jsonify({"error": "No fields found in input"}), 400
+            request_data = request.json.get("application", {})
+            print("HERE:")
+            print(request_data)
+            user = Users.objects(email=user_email).first()
+            if not user:
+                return jsonify({"error": "User not found"}), 404
 
-            users = Users.objects()
-            user = users.filter(email=user_email).first()
-            current_applications = user["applications"]
+            application_to_update = None
+            for app in user.applications:
+                if app["id"] == application_id:
+                    for key in request_data:
+                        app[key] = request_data[key]
+                    application_to_update = app
+                    break
 
-            if len(current_applications) == 0:
-                return jsonify({"error": "No applications found"}), 400
-            else:
-                updated_applications = []
-                app_to_update = None
-                application_updated_flag = False
-                for application in current_applications:
-                    if application["id"] == application_id:
-                        app_to_update = application
-                        application_updated_flag = True
-                        for key, value in request_data.items():
-                            application[key] = value
-                    updated_applications += [application]
-                    try:
-                    # Send an email notification
-                        to_email = user.email  # Use the user's email address
-                        subject = "Job Application Updated"
-                        message = f"Hello {user.fullName},\n\nThe following job application has been updated:\nJob Title: {application['jobTitle']}\nCompany: {application['companyName']}\n\nBest regards,\nYour Application Tracker"
-                        send_email(to_email, subject, message)
-                    except:
-                        return jsonify({"error": "EMAIL wasn't sent"}), 400
-                if not application_updated_flag:
-                    return jsonify({"error": "Application not found"}), 400
-                
-                user.update(applications=updated_applications)
+            if application_to_update is None:
+                return jsonify({"error": "Application not found"}), 404
 
-            return jsonify(app_to_update), 200
-        except:
-            return jsonify({"error": "Internal server error"}), 500
+            user.save()
+            return jsonify(application_to_update), 200
+        except Exception as e:
+            print(e)
+            return jsonify({"error": str(e)}), 500
 
     @app.route("/applications/<int:application_id>", methods=["DELETE"])
+    @jwt_required()
     def delete_application(application_id):
         """
         Deletes the given job application for the user
@@ -257,34 +236,19 @@ def create_app():
         """
         try:
             user_email = get_jwt_identity()
-            users = Users.objects()
-            user = users.filter(email=user_email).first()
+            user = Users.objects(email=user_email).first()
+            if not user:
+                return jsonify({"error": "User not found"}), 404
+            
+            # Filter out the application with the given ID
+            user.applications = [app for app in user.applications if app['id'] != application_id]
+            user.save()
 
-            current_applications = user["applications"]
+            # You can add an email notification here if needed
 
-            application_deleted_flag = False
-            updated_applications = []
-            app_to_delete = None
-            for application in current_applications:
-                if application["id"] != application_id:
-                    updated_applications += [application]
-                else:
-                    app_to_delete = application
-                    application_deleted_flag = True
-                    try:
-                        # Send an email notification
-                        to_email = user.email  # Use the user's email address
-                        subject = "Job Application Deleted"
-                        message = f"Hello {user.fullName},\n\nThe following job application has been deleted:\nJob Title: {application['jobTitle']}\nCompany: {application['companyName']}\n\nBest regards,\nYour Application Tracker"
-                        send_email(to_email, subject, message)
-                    except:
-                            return jsonify({"error": "EMAIL wasn't sent"}), 400
-
-            if not application_deleted_flag:
-                return jsonify({"error": "Application not found"}), 400
-            user.update(applications=updated_applications)
-            return jsonify(app_to_delete), 200
-        except:
+            return jsonify({"message": "Application deleted"}), 200
+        except Exception as e:
+            print(e)
             return jsonify({"error": "Internal server error"}), 500
 
     @app.route("/resume", methods=["POST"])

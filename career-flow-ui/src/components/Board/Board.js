@@ -146,12 +146,26 @@ function Board(props) {
     }
   };
 
-  const onDropHandler = (event, droppedStageId) => {
-    let droppedData = event.dataTransfer.getData("text/plain");
-    droppedData = JSON.parse(droppedData);
-    const filterTask = taskState.filter((x) => x.id === droppedData.taskId);
-    filterTask[0].stage = droppedStageId;
-    dispatch({ type: "ON_DROP", payload: filterTask[0] });
+  const onDropHandler = async (event, droppedStageId) => {
+    let droppedData = JSON.parse(event.dataTransfer.getData("text/plain"));
+    const updatedTask = {
+        ...taskState.find(task => task.id === droppedData.taskId),
+        stage: droppedStageId
+    };
+    dispatch({ type: "ON_DROP", payload: updatedTask });
+    // Make a PUT request to update the backend
+    try {
+        const response = await axios.put(`/applications/${updatedTask.id}`, {
+            application: updatedTask
+        }, {
+            headers: {
+                Authorization: "Bearer " + props.appState.token
+            }
+        });
+        console.log('Update response:', response.data);
+    } catch (error) {
+        console.error('Error updating application:', error);
+    }
   };
 
   const onAddingNewTask = (dataFromChild) => {

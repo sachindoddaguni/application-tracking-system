@@ -5,6 +5,8 @@ import { Card, CardContent, Typography, IconButton, CardActions } from "@mui/mat
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { makeStyles } from '@mui/styles';
+import axios from 'axios';
+
 
 const useStyles = makeStyles({
   cardHover: {
@@ -57,6 +59,34 @@ function CardItem(props) {
 
   const handleClose = () => setShow(false);
 
+  const deleteTask = (taskId) => {
+    axios.delete('/applications/' + taskId, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      }
+    })
+    .then(response => {
+      console.log('Task deleted:', response);
+      onDeletingTask(taskId); // existing function to update the state
+    })
+    .catch(error => {
+      console.error('Error deleting task:', error);
+    });
+  };
+
+  const updateTask = (updatedTask) => {
+    axios.put(`/applications/${updatedTask.id}`, { application: updatedTask }, {
+      headers: {
+        Authorization: "Bearer " + props.state.token,
+      }
+    })
+    .then(response => {
+      onUpdatingTask(response.data); // Update the state in the context
+    })
+    .catch(error => console.error('Error updating task:', error));
+  };
+
+  
   const handleShow = () => {
     setShow(true);
   };
@@ -67,15 +97,13 @@ function CardItem(props) {
       setFormValues(formValues);
       handleShow();
     } else if (type === "delete") {
-      onDeletingTask(props.task.id);
+      deleteTask(props.task.id);
     }
   };
 
   const handleUpdate = (values, submitProps) => {
-
-    console.log(values)
     submitProps.setSubmitting(false);
-    onUpdatingTask(values);
+    updateTask(values); // Call the updateTask function with the new values
     setShow(false);
     submitProps.resetForm();
   };

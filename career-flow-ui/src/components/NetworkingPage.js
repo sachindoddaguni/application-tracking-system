@@ -70,7 +70,7 @@ function NetworkingPage(props) {
       })
       .catch(error => console.error('Error:', error))
       .finally(() => setOpenModal(false));
-    };
+  };
 
   const resetForm = () => {
     setNewContact({
@@ -82,6 +82,12 @@ function NetworkingPage(props) {
       phone: '',
       linkedin: '',
     });
+  };
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   return (
@@ -96,45 +102,48 @@ function NetworkingPage(props) {
           </Button>
         </Box>
         <Divider sx={{ mb: 10 }} />
-
         {contacts.length > 0 ? (
           <Container maxWidth="lg">
+            <Box display="flex" justifyContent="center" sx={{ mb: 5 }}>
+            <TextField label="Search Contact" name="search" onChange={handleSearchChange} sx={{ width: '50%' }}/>
+            </Box>
             <Grid container spacing={4}>
-              {contacts.map((contact) => (
-                <Grid item key={contact.id} xs={12} sm={6} md={4}>
-                  <Card sx={{ height: '95%', display: 'flex', flexDirection: 'column', border: '1px solid #D3D3D3' }}>
-                    <CardContent >
-                      <Box display="flex">
-                        <Avatar sx={{ mr: 3, mt: 2, ml: 1 }} />
-                        <Box display="flex" flexDirection='column'>
-                          <Box display="flex">
-                            <Typography fontWeight='bold' sx={{ mr: 0.5 }}>{contact.firstName}</Typography>
-                            <Typography fontWeight='bold'>{contact.lastName}</Typography>
+              {contacts.filter(contact =>
+                contact.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                contact.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                contact.companyName.toLowerCase().includes(searchQuery.toLowerCase())).map((contact) => (
+                  <Grid item key={contact.id} xs={12} sm={6} md={4}>
+                    <Card sx={{ height: '95%', display: 'flex', flexDirection: 'column', border: '1px solid #D3D3D3' }}>
+                      <CardContent >
+                        <Box display="flex">
+                          <Avatar sx={{ mr: 3, mt: 2, ml: 1 }} />
+                          <Box display="flex" flexDirection='column'>
+                            <Box display="flex">
+                              <Typography fontWeight='bold' sx={{ mr: 0.5 }}>{contact.firstName}</Typography>
+                              <Typography fontWeight='bold'>{contact.lastName}</Typography>
+                            </Box>
+                            <Typography>{contact.jobTitle}</Typography>
+                            <Typography>{contact.companyName}</Typography>
                           </Box>
-                          <Typography>{contact.jobTitle}</Typography>
-                          <Typography>{contact.companyName}</Typography>
                         </Box>
-                      </Box>
-                      <Divider sx={{ mt: 2, mb: 2 }} />
-                      <Box display="flex" sx={{ mb: 1 }}>
-                        <MailOutlinedIcon color='disabled' sx={{ mr: 1 }} aria-hidden="true" />
-                        <Typography>{contact.email ? contact.email : "N/A"}</Typography>
-                      </Box>
-                      <Box display="flex">
-                        <PhoneOutlinedIcon color='disabled' sx={{ mr: 1 }} aria-hidden="true" />
-                        <Typography>{contact.phone ? contact.phone : "N/A"}</Typography>
-                      </Box>
-                      <Box display="flex" sx={{ mt: 1 }}>
-                        <LinkedInIcon color='disabled' sx={{ mr: 1 }} aria-hidden="true" />
-                        <Typography>{contact.linkedin ? contact.linkedin : "N/A"}</Typography>
-                      </Box>
-                    </CardContent>
-                    <CardActions>
+                        <Divider sx={{ mt: 2, mb: 2 }} />
+                        <Box display="flex" sx={{ mb: 1 }}>
+                          <MailOutlinedIcon color='disabled' sx={{ mr: 1 }} aria-hidden="true" />
+                          <Typography>{contact.email ? contact.email : "N/A"}</Typography>
+                        </Box>
+                        <Box display="flex">
+                          <PhoneOutlinedIcon color='disabled' sx={{ mr: 1 }} aria-hidden="true" />
+                          <Typography>{contact.phone ? contact.phone : "N/A"}</Typography>
+                        </Box>
+                        <Box display="flex" sx={{ mt: 1 }}>
+                          <LinkedInIcon color='disabled' sx={{ mr: 1 }} aria-hidden="true" />
+                          <Typography>{contact.linkedin ? contact.linkedin : "N/A"}</Typography>
+                        </Box>
+                      </CardContent>
 
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
+                    </Card>
+                  </Grid>
+                ))}
             </Grid>
           </Container>
         ) : (
@@ -159,11 +168,11 @@ function NetworkingPage(props) {
             </Box>
             <Box display="flex" justifyContent="space-between" width="100%">
               <TextField fullWidth label="Job Title" name="jobTitle" value={newContact.jobTitle} onChange={handleInputChange} placeholder="i.e: CEO" margin="dense" sx={{ mr: 2, width: '50%' }} inputProps={{ 'aria-label': 'Job Title' }} />
-              <TextField fullWidth label="Company" name="company" value={newContact.company} onChange={handleInputChange} placeholder="add company" margin="dense" sx={{ ml: 2, width: '50%' }} inputProps={{ 'aria-label': 'Company' }} />
+              <TextField fullWidth label="Company" name="companyName" value={newContact.companyName} onChange={handleInputChange} placeholder="add company" margin="dense" sx={{ ml: 2, width: '50%' }} inputProps={{ 'aria-label': 'Company' }} />
             </Box>
             <TextField fullWidth onChange={handleInputChange} label="Email" name="email" value={newContact.email} margin="dense" inputProps={{ 'aria-label': 'Email' }} />
             <TextField fullWidth onChange={handleInputChange} label="Phone" name="phone" value={newContact.phone} margin="dense" inputProps={{ 'aria-label': 'Phone' }} />
-            <TextField fullWidth onChange={handleInputChange} label="LinkedIn" name="linkedin" value={newContact.linkedin} margin="dense" inputProps={{ 'aria-label': 'LinkedIn' }}/>
+            <TextField fullWidth onChange={handleInputChange} label="LinkedIn" name="linkedin" value={newContact.linkedin} margin="dense" inputProps={{ 'aria-label': 'LinkedIn' }} />
           </Box>
         </DialogContent>
         <DialogActions>
@@ -175,8 +184,6 @@ function NetworkingPage(props) {
           </Button>
         </DialogActions>
       </Dialog>
-
-
     </div>
   )
 }

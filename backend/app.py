@@ -587,7 +587,7 @@ def create_app():
                 "firstName": data["firstName"],
                 "lastName": data["lastName"],
                 "jobTitle": data.get("jobTitle", ""),
-                "company": data.get("company", ""),
+                "companyName": data.get("companyName", ""),
                 "email": data.get("email", ""),
                 "phone": data.get("phone", ""),
                 "linkedin": data.get("linkedin", "")

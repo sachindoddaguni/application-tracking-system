@@ -66,7 +66,7 @@ class UserProfilePage extends Component {
           <h2>Achievements</h2>
           <p>{this.state.achievements}</p>
         </div>
-        <div>
+        <div style={{ marginTop: "2rem", marginleft: "1rem", marginRight: "1rem", alignItems: 'center'}}>
                 <button type="button" onClick={this.handleSubmit}>
                                     Login Page
                                 </button>

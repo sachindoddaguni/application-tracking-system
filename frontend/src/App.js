@@ -11,6 +11,7 @@ import BuildResumePage from './resume/BuildResumePage'
 import CreateUserProfilePage from './login/CreateProfilePage';
 import UserProfilePage from './sidebar/UserProfilePage';
 import MoreInfoPage from './login/MoreInfoPage';
+import QuizPage from './login/quiz';
 
 export default class App extends React.Component {
   constructor(props){
@@ -23,14 +24,15 @@ export default class App extends React.Component {
       'BuildResumePage': <BuildResumePage/>,
       'UserProfileCreatePage': <CreateUserProfilePage/>,
       'UserProfilePage': <UserProfilePage/>,
-      'MoreInfoPage': <MoreInfoPage/>
-
+      'MoreInfoPage': <MoreInfoPage/>,
+      'QuizPage': <QuizPage/>
     }
     this.state ={
       currentPage: <CreateUserProfilePage/>,
       mapRouter: mapRouter,
       sidebar: false,
-      display: "My applications"
+      display: "My applications",
+      currPageName : "LoginPage"
     }
     this.sidebarHandler = this.sidebarHandler.bind(this);
   };
@@ -59,6 +61,10 @@ export default class App extends React.Component {
     this.setState({
       currentPage: this.state.mapRouter[pageName]
     })
+  }
+
+  switchToQuiz=()=>{
+    this.setState({currPageName: "QuizPage"})
   }
 
   render() {
@@ -98,7 +104,12 @@ export default class App extends React.Component {
               <button className="btn btn-danger btn-icon"><i className="fas fa-plus"></i>&nbsp;New</button>
             </span> */}
           </div>
-          <LoginPage side={this.sidebarHandler}/>
+          <div style={{display: this.state.currPageName === 'LoginPage'? "block" : "none"}}>
+            <LoginPage  side={this.sidebarHandler} signupSw = {this.switchToQuiz}/>
+          </div>
+          <div style={{display: this.state.currPageName === 'QuizPage'? "block" : "none"}}>
+            <QuizPage side={this.sidebarHandler}/>
+          </div>
         </div>
       </div>
     </div>

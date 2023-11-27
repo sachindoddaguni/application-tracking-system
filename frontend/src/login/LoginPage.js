@@ -44,7 +44,9 @@ export default class LoginPage extends Component{
         //console.log(obj)
         signUp(obj).then((res) => {
             alert("Sign up successfull! Proceed to Login");
+            this.props.signupSw();
         }).catch((error) => {
+            this.props.signupSw();
             alert("Error while signing up !");
         })
          

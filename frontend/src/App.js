@@ -32,7 +32,8 @@ export default class App extends React.Component {
       mapRouter: mapRouter,
       sidebar: false,
       display: "My applications",
-      currPageName : "LoginPage"
+      currPageName : "LoginPage",
+      finalProfile: {}
     }
     this.sidebarHandler = this.sidebarHandler.bind(this);
   };
@@ -70,25 +71,35 @@ export default class App extends React.Component {
     })
   }
 
-  switchToProfile=()=>{
+  switchToProfile=(quizJson)=>{
+    let newJson = {}
+    newJson["quiz"] = quizJson
     this.setState({
       currPageName: "CreateProfilePage",
-      display: "We would love to get to know you better"
+      display: "We would love to get to know you better",
+      finalProfile: newJson
     })
   }
 
-  switchToMoreInfo=()=>{
+  switchToMoreInfo=(profileDetails)=>{
+    let newJson = this.state.finalProfile
+    newJson["profileDetails"] = profileDetails
     this.setState({
       currPageName: "MoreInfoPage",
-      display: "Where do you aspire to be"
+      display: "Where do you aspire to be",
+      finalProfile: newJson
     })
   }
 
-  switchtoProfilePage=()=>{
+  switchtoProfilePage=(targetJSON)=>{
+    let newJson = this.state.finalProfile
+    newJson["targetDetails"] = targetJSON
     this.setState({
       currPageName: "UserProfilePage",
-      display: "Review the data entered"
+      display: "Review the data entered",
+      finalProfile: newJson
   })
+  console.log(JSON.stringify(newJson))
   }
 
   switchtoLogin=()=>{

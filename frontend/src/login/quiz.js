@@ -58,7 +58,12 @@ export default class QuizPage extends Component {
 
 
   handleSubmit = () => {
-    this.props.side();
+    let finalJson = {
+      level: this.state.level,
+      areaOfInterest: this.state.areaOfInterest,
+      preferredLocations: this.state.preferredLocations
+    }
+    this.props.side(finalJson);
     if (this.state.level && this.state.areaOfInterest && this.state.preferredLocations.length > 0) {
       this.setSuccessMessage('Quiz submitted successfully!');
     } else {

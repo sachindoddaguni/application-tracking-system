@@ -56,7 +56,13 @@ export default class CreateUserProfilePage extends Component {
     }
 
     handleSubmit = () => {
-        this.props.side()
+        let finalJson = {
+            "education": this.state.eds,
+            "workExperience": this.state.WorkEx,
+            "skills": this.state.skills,
+            "achievements": this.state.achievements
+        }
+        this.props.side(finalJson)
     }
 
     render() {

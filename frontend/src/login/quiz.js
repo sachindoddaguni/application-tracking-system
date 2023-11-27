@@ -126,6 +126,7 @@ export default class QuizPage extends Component {
         ))}
       </div>
 
+
       <button onClick={this.handleSubmit}
        style={{
         backgroundColor: '#4caf50',
@@ -137,6 +138,8 @@ export default class QuizPage extends Component {
         marginTop: '20px',
       }}>Submit</button>
 
+      <div style={{ marginTop: "2rem", marginleft: "1rem", marginRight: "1rem", alignItems: 'center'}}>
+      </div>
       {this.successMessage && <p style={{ color: 'green' }}>{this.successMessage}</p>}
       {this.errorMessage && <p style={{ color: 'red' }}>{this.errorMessage}</p>}
     </div>

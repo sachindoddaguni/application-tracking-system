@@ -38,6 +38,10 @@ class UserProfilePage extends Component {
     ));
   }
 
+  handleSubmit = () => {
+    this.props.side()
+}
+
   render() {
     return (
       <div>
@@ -62,7 +66,13 @@ class UserProfilePage extends Component {
           <h2>Achievements</h2>
           <p>{this.state.achievements}</p>
         </div>
+        <div>
+                <button type="button" onClick={this.handleSubmit}>
+                                    Login Page
+                                </button>
+                </div>
       </div>
+      
     );
   }
 }

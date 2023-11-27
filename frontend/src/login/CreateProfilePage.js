@@ -10,14 +10,12 @@ export default class CreateUserProfilePage extends Component {
             eds: [
                 { collegeName: '', degree: '', major: '', gpa: '' },
             ],
-            education: {},
             WorkEx: [
                 { Company: '', Position: '' }
             ],
             achievements: "",
             skills: ""
         }
-
     }
 
 
@@ -58,7 +56,7 @@ export default class CreateUserProfilePage extends Component {
     }
 
     handleSubmit = () => {
-
+        this.props.side()
     }
 
     render() {
@@ -158,7 +156,7 @@ export default class CreateUserProfilePage extends Component {
                         <div  style={{ marginleft: "1rem", marginRight: "1rem" }}>
                         <input
                             type="text"
-                            value={this.state.achievements}
+                            value={this.state.skills}
                             onChange={(e) => this.setSkills(e.target.value)}
                         /></div>
                     </label>

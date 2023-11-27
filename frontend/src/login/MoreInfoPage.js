@@ -36,7 +36,7 @@ export default class MoreInfoPage extends Component {
     }
 
     handleSubmit = () => {
-
+        this.props.side()
     }
 
     render() {
@@ -88,6 +88,11 @@ export default class MoreInfoPage extends Component {
                         />
                         </div>
                     </label>
+                </div>
+                <div>
+                <button type="button" onClick={this.handleSubmit}>
+                                    Review your details
+                                </button>
                 </div>
             </div>
         )

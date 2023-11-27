@@ -45,7 +45,7 @@ export default class App extends React.Component {
 
   sidebarHandler = () => {
     this.setState({
-      currentPage: this.state.mapRouter['UserProfilePage'],
+      currentPage: this.state.mapRouter['ApplicationPage'],
       sidebar: true
     })
   }
@@ -64,7 +64,38 @@ export default class App extends React.Component {
   }
 
   switchToQuiz=()=>{
-    this.setState({currPageName: "QuizPage"})
+    this.setState({
+      currPageName: "QuizPage",
+      display: "Let's take a quick quiz"
+    })
+  }
+
+  switchToProfile=()=>{
+    this.setState({
+      currPageName: "CreateProfilePage",
+      display: "We would love to get to know you better"
+    })
+  }
+
+  switchToMoreInfo=()=>{
+    this.setState({
+      currPageName: "MoreInfoPage",
+      display: "Where do you aspire to be"
+    })
+  }
+
+  switchtoProfilePage=()=>{
+    this.setState({
+      currPageName: "UserProfilePage",
+      display: "Review the data entered"
+  })
+  }
+
+  switchtoLogin=()=>{
+    this.setState({
+      currPageName: "LoginPage",
+      display: "My applications"
+  })
   }
 
   render() {
@@ -98,7 +129,7 @@ export default class App extends React.Component {
       app = (<div className="main-page">
       <div className="main">
         <div className="content">
-          <h1 className="text-center" style={{padding: 0.4 + 'em'}}>My applications</h1>
+          <h1 className="text-center" style={{padding: 0.4 + 'em'}}>{this.state.display}</h1>
           <div className="">
             {/* <span className="btn-icon ">
               <button className="btn btn-danger btn-icon"><i className="fas fa-plus"></i>&nbsp;New</button>
@@ -108,8 +139,18 @@ export default class App extends React.Component {
             <LoginPage  side={this.sidebarHandler} signupSw = {this.switchToQuiz}/>
           </div>
           <div style={{display: this.state.currPageName === 'QuizPage'? "block" : "none"}}>
-            <QuizPage side={this.sidebarHandler}/>
+            <QuizPage side={this.switchToProfile}/>
           </div>
+          <div style={{display: this.state.currPageName === 'CreateProfilePage'? "block" : "none"}}>
+            <CreateUserProfilePage side={this.switchToMoreInfo}/>
+          </div>
+          <div style={{display: this.state.currPageName === 'MoreInfoPage'? "block" : "none"}}>
+            <MoreInfoPage side={this.switchtoProfilePage}/>
+          </div>
+          <div style={{display: this.state.currPageName === 'UserProfilePage'? "block" : "none"}}>
+            <UserProfilePage side={this.switchtoLogin}/>
+          </div>
+          
         </div>
       </div>
     </div>

@@ -27,7 +27,6 @@ export default class LoginPage extends Component{
             this.props.side()
         }).catch((error) => {
             console.log(error)
-            this.props.side()
             alert("Error while login ! Wrong username or password");
         })
          
@@ -44,9 +43,7 @@ export default class LoginPage extends Component{
         //console.log(obj)
         signUp(obj).then((res) => {
             alert("Sign up successfull! Proceed to Login");
-            this.props.signupSw();
         }).catch((error) => {
-            this.props.signupSw();
             alert("Error while signing up !");
         })
          

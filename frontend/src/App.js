@@ -8,6 +8,9 @@ import SearchPage from './search/SearchPage'
 import LoginPage from './login/LoginPage'
 import ManageResumePage from './resume/ManageResumePage'
 import BuildResumePage from './resume/BuildResumePage'
+import CreateUserProfilePage from './login/CreateProfilePage';
+import UserProfilePage from './sidebar/UserProfilePage';
+import MoreInfoPage from './login/MoreInfoPage';
 
 export default class App extends React.Component {
   constructor(props){
@@ -17,13 +20,17 @@ export default class App extends React.Component {
       'ApplicationPage' : <ApplicationPage/>,
       'LoginPage': <LoginPage/>,
       'ManageResumePage': <ManageResumePage/>,
-      'BuildResumePage': <BuildResumePage/>
+      'BuildResumePage': <BuildResumePage/>,
+      'UserProfileCreatePage': <CreateUserProfilePage/>,
+      'UserProfilePage': <UserProfilePage/>,
+      'MoreInfoPage': <MoreInfoPage/>
 
     }
     this.state ={
-      currentPage: <LoginPage/>,
+      currentPage: <CreateUserProfilePage/>,
       mapRouter: mapRouter,
       sidebar: false,
+      display: "My applications"
     }
     this.sidebarHandler = this.sidebarHandler.bind(this);
   };
@@ -36,7 +43,7 @@ export default class App extends React.Component {
 
   sidebarHandler = () => {
     this.setState({
-      currentPage: this.state.mapRouter['ApplicationPage'],
+      currentPage: this.state.mapRouter['UserProfilePage'],
       sidebar: true
     })
   }
@@ -63,6 +70,7 @@ export default class App extends React.Component {
         <div className="main">
           <div className="content">
             <div className="">
+
               <h1 className="text-center">My applications</h1>
               {/* <span className="btn-icon ">
                 <button className="btn btn-danger btn-icon"><i className="fas fa-plus"></i>&nbsp;New</button>

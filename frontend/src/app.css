@@ -1,6 +1,6 @@
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #BA55D3;
+  background-color: #E6E6FA;
   margin: 0;
   padding: 0;
   display: flex;
@@ -10,18 +10,20 @@ body {
 }
 
 .container {
-  background-color: #fff;
+  background-color: #FFFFF0;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
+  font-family: "Times New Roman", Times, serif;
   text-align: center;
   color: #333;
 }
 
 p {
+  font-family: "Times New Roman", Times, serif;
   margin-bottom: 10px;
   color: #555;
 }
@@ -31,12 +33,14 @@ label {
   margin-bottom: 10px;
 }
 
-input[type="radio"],
+input[type="radio"] 
 input[type="checkbox"] {
   margin-right: 5px;
+  font-size: 10px;
 }
 
 button {
+  font-family: "Times New Roman", Times, serif;
   background-color: #4caf50;
   color: #fff;
   padding: 10px 20px;

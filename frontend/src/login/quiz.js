@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-//import '../app.css';
+//import './app.css';
 
 export default class QuizPage extends Component {
   constructor (props) {
@@ -32,21 +32,6 @@ export default class QuizPage extends Component {
   handleAreaOfInterestChange = (event) => {
     this.setState({ areaOfInterest : event.target.value});
   };
-  /*
-  handleLocationChange = (event) => {
-    let selectedLocation = event.target.value;
-    console.log()
-    let locJson = this.state.preferredLocations
-    if (this.state.preferredLocations.includes(selectedLocation)) {
-        let pl = locJson.filter((loc) => loc !== selectedLocation)
-        this.setState({preferredLocations: pl})
-    } else {
-        locJson.push(locJson)
-    }
-    this.setState({preferredLocations: locJson});
-
-  };
-  */
   handleLocationChange = (event) => {
     let selectedLocation = event.target.value;
     this.setState((prevState) => {
@@ -141,7 +126,16 @@ export default class QuizPage extends Component {
         ))}
       </div>
 
-      <button onClick={this.handleSubmit}>Submit</button>
+      <button onClick={this.handleSubmit}
+       style={{
+        backgroundColor: '#4caf50',
+        color: '#fff',
+        padding: '10px 20px',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        marginTop: '20px',
+      }}>Submit</button>
 
       {this.successMessage && <p style={{ color: 'green' }}>{this.successMessage}</p>}
       {this.errorMessage && <p style={{ color: 'red' }}>{this.errorMessage}</p>}
